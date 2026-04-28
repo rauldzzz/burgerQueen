@@ -6005,8 +6005,8 @@ GameObject:
   - component: {fileID: 931479204}
   - component: {fileID: 931479203}
   - component: {fileID: 931479206}
-  - component: {fileID: 931479207}
   - component: {fileID: 931479208}
+  - component: {fileID: 931479209}
   m_Layer: 0
   m_Name: Player1
   m_TagString: Player
@@ -6122,18 +6122,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   q: {x: 0, y: 0, z: 0, w: 0}
   manual: 0
---- !u!114 &931479207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 931479201}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 985fd0a5153070f4ea70250ed865ff3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
 --- !u!114 &931479208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6148,6 +6136,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteraction
   heldItem: {fileID: 0}
   heldItemName: 
+--- !u!114 &931479209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 931479201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05648a3b372ee90479ce1990fddccd94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
 --- !u!1001 &945349091
 PrefabInstance:
   m_ObjectHideFlags: 0
