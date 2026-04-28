@@ -19,16 +19,19 @@ public class Counter_Processor : Counter
 
     protected override void Update()
     {
-        if (playerInside == null || !isProcessing) return;
+        // Run base detection so playerInside gets updated
+        base.Update();
 
-        timer += Time.deltaTime;
-
-        // TODO: update progress circle here using (timer / interactDelay)
-
-        if (timer >= interactDelay)
+        // Keep processing even if player walks away
+        if (isProcessing)
         {
-            FinishProcessing();
-            timer = 0f;
+            timer += Time.deltaTime;
+
+            if (timer >= interactDelay)
+            {
+                FinishProcessing();
+                timer = 0f;
+            }
         }
     }
 
@@ -38,7 +41,6 @@ public class Counter_Processor : Counter
 
         if (player.IsHoldingItem() && !HasItem())
         {
-            // Check if the held item matches a recipe
             ProcessRecipe match = recipes.Find(r => r.inputPrefab.name == player.heldItemName);
             if (match != null)
             {
@@ -56,7 +58,6 @@ public class Counter_Processor : Counter
         }
         else if (!player.IsHoldingItem() && HasItem() && !isProcessing)
         {
-            // Pick up finished item
             GameObject item = TakeItem();
             player.PickUp(item, item.name);
         }
@@ -66,11 +67,9 @@ public class Counter_Processor : Counter
     {
         if (activeRecipe == null) return;
 
-        // Destroy the input item on the counter
         if (itemOnCounter != null)
             Destroy(itemOnCounter);
 
-        // Spawn the output item on the counter
         GameObject output = Instantiate(activeRecipe.outputPrefab);
         output.transform.localScale = activeRecipe.outputScale;
         PlaceItem(output, activeRecipe.outputPrefab.name);
@@ -78,12 +77,5 @@ public class Counter_Processor : Counter
         isProcessing = false;
         activeRecipe = null;
         Debug.Log("Processing done. Item ready.");
-    }
-
-    protected override void OnTriggerExit(Collider other)
-    {
-        base.OnTriggerExit(other);
-        // Leaving resets the timer but doesn't cancel processing
-        // The station keeps going even if player walks away
     }
 }
