@@ -4,49 +4,50 @@ using TMPro;
 
 public class OrdersManager : MonoBehaviour
 {
-    [System.Serializable]
-    public class Order
-    {
-        public string dishName;
-        public int reward;
-    }
-
     [Header("Orders")]
-    public List<Order> possibleOrders;
+    // 1. Cambiamos la lista para que reciba archivos BurgerRecipe
+    public List<BurgerRecipe> possibleOrders;
     public TextMeshProUGUI orderText;
 
-    private Order currentOrder;
+    // 2. La comanda actual ahora es un objeto BurgerRecipe
+    private BurgerRecipe currentOrder;
 
     void Start()
     {
-        GenerateNewOrder();
+        GenerateNewOrder(); 
     }
 
     public void GenerateNewOrder()
     {
-        if (possibleOrders.Count == 0) return;
+        if (possibleOrders.Count == 0) return; 
+        
+        // 3. Elegimos una receta aleatoria de la lista
         currentOrder = possibleOrders[Random.Range(0, possibleOrders.Count)];
+        
         UpdateUI();
-        Debug.Log("New order: " + currentOrder.dishName);
+        Debug.Log("New order: " + currentOrder.burgerName);
     }
 
-    public bool CompleteOrder(string dishName)
+    public bool CompleteOrder(string submittedBurgerName)
     {
-        if (currentOrder == null) return false;
+        if (currentOrder == null) return false; 
 
-        if (dishName == currentOrder.dishName)
+        // 4. Comparamos el nombre
+        if (submittedBurgerName == currentOrder.burgerName)
         {
+            // Sumamos el dinero
             FindObjectOfType<ScoreManager>().AddMoney(currentOrder.reward);
-            GenerateNewOrder();
+            
+            GenerateNewOrder(); 
             return true;
         }
 
-        return false;
+        return false; 
     }
 
     private void UpdateUI()
     {
-        if (orderText != null)
-            orderText.text = "Order: " + currentOrder.dishName;
+        if (orderText != null) 
+            orderText.text = currentOrder.burgerName;
     }
 }
