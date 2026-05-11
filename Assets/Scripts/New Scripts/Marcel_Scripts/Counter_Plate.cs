@@ -90,11 +90,9 @@ public class Counter_Plate : Counter
 
     private void CompleteDish(PlateRecipe recipe)
     {
-        // Destroy the plate on the counter
         if (itemOnCounter != null)
             Destroy(itemOnCounter);
 
-        // Spawn the completed dish
         GameObject dish = Instantiate(recipe.completedDishPrefab);
         dish.transform.localScale = recipe.outputScale;
         PlaceItem(dish, recipe.completedDishPrefab.name);

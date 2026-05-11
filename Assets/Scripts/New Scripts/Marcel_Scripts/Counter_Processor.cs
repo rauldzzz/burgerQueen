@@ -19,10 +19,8 @@ public class Counter_Processor : Counter
 
     protected override void Update()
     {
-        // Run base detection so playerInside gets updated
         base.Update();
 
-        // Keep processing even if player walks away
         if (isProcessing)
         {
             timer += Time.deltaTime;
@@ -38,44 +36,39 @@ public class Counter_Processor : Counter
     protected override void HandleInteraction(PlayerInteraction player)
     {
         if (isProcessing) return;
+        if (!player.IsHoldingItem()) return;
 
-        if (player.IsHoldingItem() && !HasItem())
+        // Check if held item matches any recipe
+        ProcessRecipe match = recipes.Find(r => r.inputPrefab.name == player.heldItemName);
+
+        if (match != null)
         {
-            ProcessRecipe match = recipes.Find(r => r.inputPrefab.name == player.heldItemName);
-            if (match != null)
-            {
-                GameObject dropped = player.Drop();
-                PlaceItem(dropped, dropped.name);
-                activeRecipe = match;
-                isProcessing = true;
-                timer = 0f;
-                Debug.Log("Processing: " + match.inputPrefab.name);
-            }
-            else
-            {
-                Debug.Log("This station can't process: " + player.heldItemName);
-            }
+            activeRecipe = match;
+            isProcessing = true;
+            timer = 0f;
+            Debug.Log("Processing: " + match.inputPrefab.name);
         }
-        else if (!player.IsHoldingItem() && HasItem() && !isProcessing)
+        else
         {
-            GameObject item = TakeItem();
-            player.PickUp(item, item.name);
+            Debug.Log("This station can't process: " + player.heldItemName);
         }
     }
 
     private void FinishProcessing()
     {
         if (activeRecipe == null) return;
+        if (playerInside == null) return;
 
-        if (itemOnCounter != null)
-            Destroy(itemOnCounter);
+        // Destroy the current held item
+        Destroy(playerInside.heldItem);
 
+        // Spawn the output and give it to the player
         GameObject output = Instantiate(activeRecipe.outputPrefab);
         output.transform.localScale = activeRecipe.outputScale;
-        PlaceItem(output, activeRecipe.outputPrefab.name);
+        playerInside.PickUp(output, activeRecipe.outputPrefab.name);
 
         isProcessing = false;
         activeRecipe = null;
-        Debug.Log("Processing done. Item ready.");
+        Debug.Log("Processing done: " + activeRecipe?.outputPrefab.name);
     }
 }
