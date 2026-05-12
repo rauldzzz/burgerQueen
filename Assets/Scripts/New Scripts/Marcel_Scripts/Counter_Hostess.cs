@@ -44,7 +44,20 @@ public class Counter_Hostess : Counter
 
         if (!player.IsHoldingItem())
         {
-            Debug.Log($"[Counter_Hostess] Player is not holding anything, nothing to advance on {name}.");
+            if (HasItem())
+            {
+                GameObject item = TakeItem();
+                if (item != null)
+                {
+                    player.PickUp(item, item.name);
+                    Debug.Log($"[Counter_Hostess] Player picked up '{item.name}' from empty hands on {name}.");
+                }
+            }
+            else
+            {
+                Debug.Log($"[Counter_Hostess] Player is not holding anything and {name} is empty.");
+            }
+
             return;
         }
 
