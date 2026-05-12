@@ -15,3 +15,11 @@ MonoBehaviour:
   burgerName: DoubleCheeseBurger
   burger: {fileID: 1034906039700480798, guid: 2d5b946fcd5ed2847a0dbdb8ee8f4e19, type: 3}
   reward: 35
+  finalBurgerImage: {fileID: 21300000, guid: 4735e596f665a4d4f8e840c7723683a7, type: 3}
+  ingredientImages:
+  - {fileID: 21300000, guid: 10232ac9b96a0d44281a317134cbc6da, type: 3}
+  - {fileID: 21300000, guid: 7d3900ea85ede754a9f85fa6e49fc6c9, type: 3}
+  - {fileID: 21300000, guid: a46497d53d5a73f4b8fde78b895d8e80, type: 3}
+  - {fileID: 21300000, guid: 0a1d9babaf985684c9bb25636a4b5a26, type: 3}
+  - {fileID: 21300000, guid: 0a1d9babaf985684c9bb25636a4b5a26, type: 3}
+  - {fileID: 21300000, guid: 1e1b0996d8ee81640acce5e7ee2bce9e, type: 3}

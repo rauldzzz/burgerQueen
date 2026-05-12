@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI; // ¡Importante añadir esto para usar Image!
+using UnityEngine.UI; // ï¿½Importante aï¿½adir esto para usar Image!
 using System.Collections.Generic;
 using TMPro;
 
@@ -10,11 +10,13 @@ public class OrdersManager : MonoBehaviour
 
     [Header("UI References")]
     public TextMeshProUGUI orderText;
-    public Image finalBurgerDisplay; // Donde se mostrará la hamburguesa completa
-    public Transform ingredientsContainer; // El contenedor donde aparecerán los iconos
-    public GameObject ingredientIconPrefab; // Un prefab que será solo un objeto de UI Image
+    public Image finalBurgerDisplay; // Donde se mostrarï¿½ la hamburguesa completa
+    public Transform ingredientsContainer; // El contenedor donde aparecerï¿½n los iconos
+    public GameObject ingredientIconPrefab; // Un prefab que serï¿½ solo un objeto de UI Image
 
     private BurgerRecipe currentOrder;
+
+    public BurgerRecipe CurrentOrder => currentOrder;
 
     void Start()
     {
@@ -57,7 +59,7 @@ public class OrdersManager : MonoBehaviour
             finalBurgerDisplay.sprite = currentOrder.finalBurgerImage;
         }
 
-        // 3. Mostrar los ingredientes dinámicamente
+        // 3. Mostrar los ingredientes dinï¿½micamente
         if (ingredientsContainer != null && ingredientIconPrefab != null)
         {
             // Primero, borramos los iconos de la orden anterior

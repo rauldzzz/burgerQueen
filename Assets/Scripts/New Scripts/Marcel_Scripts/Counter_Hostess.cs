@@ -7,6 +7,7 @@ public class Counter_Hostess : Counter
     public BurgerAssemblyRecipe defaultRecipe;
     public List<BurgerAssemblyRecipe> recipes = new List<BurgerAssemblyRecipe>();
     public bool autoSpawnStartingState = true;
+    public OrdersManager ordersManager;
 
     protected override void Start()
     {
@@ -22,7 +23,6 @@ public class Counter_Hostess : Counter
     {
         if (!player.IsHoldingItem()) return;
         if (!HasItem()) return;
-
         BurgerAssemblyRecipe.BurgerAssemblyStep step = FindMatchingStep(itemNameOnCounter, player.heldItemName);
         if (step == null) return;
 
@@ -47,8 +47,7 @@ public class Counter_Hostess : Counter
     private void EnsureStartingState()
     {
         if (HasItem()) return;
-
-        BurgerAssemblyRecipe recipe = defaultRecipe != null ? defaultRecipe : FindFirstRecipeWithStartingState();
+        BurgerAssemblyRecipe recipe = GetRecipeForCurrentOrder() ?? (defaultRecipe != null ? defaultRecipe : FindFirstRecipeWithStartingState());
         if (recipe == null) return;
         if (recipe.startingStatePrefab == null) return;
 
@@ -72,12 +71,21 @@ public class Counter_Hostess : Counter
 
     private BurgerAssemblyRecipe.BurgerAssemblyStep FindMatchingStep(string currentStateName, string heldItemName)
     {
+        // 1) Try to use the recipe currently selected by OrdersManager (preferred)
+        BurgerAssemblyRecipe orderRecipe = GetRecipeForCurrentOrder();
+        if (orderRecipe != null && orderRecipe.TryGetStep(currentStateName, heldItemName, out BurgerAssemblyRecipe.BurgerAssemblyStep orderStep))
+        {
+            return orderStep;
+        }
+
+        // 2) Try defaultRecipe assigned in inspector
         BurgerAssemblyRecipe recipe = defaultRecipe;
         if (recipe != null && recipe.TryGetStep(currentStateName, heldItemName, out BurgerAssemblyRecipe.BurgerAssemblyStep step))
         {
             return step;
         }
 
+        // 3) Try other recipes list
         for (int i = 0; i < recipes.Count; i++)
         {
             recipe = recipes[i];
@@ -87,6 +95,33 @@ public class Counter_Hostess : Counter
             {
                 return matchingStep;
             }
+        }
+
+        return null;
+    }
+
+    private BurgerAssemblyRecipe GetRecipeForCurrentOrder()
+    {
+        // Prefer explicit reference
+        if (ordersManager == null)
+        {
+            ordersManager = FindObjectOfType<OrdersManager>();
+        }
+
+        if (ordersManager == null) return null;
+
+        var current = ordersManager.CurrentOrder;
+        if (current == null) return null;
+
+        // Match by burgerName
+        string orderName = current.burgerName;
+        if (defaultRecipe != null && defaultRecipe.burgerName == orderName) return defaultRecipe;
+
+        for (int i = 0; i < recipes.Count; i++)
+        {
+            var r = recipes[i];
+            if (r == null) continue;
+            if (r.burgerName == orderName) return r;
         }
 
         return null;
