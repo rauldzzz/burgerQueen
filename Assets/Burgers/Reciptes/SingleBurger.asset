@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: SingleBurger
   m_EditorClassIdentifier: Assembly-CSharp::BurgerRecipe
   burgerName: SingleBurger
-  burger: {fileID: 0}
+  burger: {fileID: 6845100841486814325, guid: 2167878878a6f9545a85d8a8d0a05cdf, type: 3}
   reward: 25
