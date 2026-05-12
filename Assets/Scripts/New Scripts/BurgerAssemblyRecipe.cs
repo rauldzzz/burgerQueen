@@ -18,6 +18,9 @@ public class BurgerAssemblyRecipe : ScriptableObject
 
     public bool TryGetStep(string currentStateName, string heldItemName, out BurgerAssemblyStep step)
     {
+        string normalizedCurrentStateName = NormalizePrefabName(currentStateName);
+        string normalizedHeldItemName = NormalizePrefabName(heldItemName);
+
         for (int i = 0; i < steps.Count; i++)
         {
             BurgerAssemblyStep candidate = steps[i];
@@ -27,8 +30,8 @@ public class BurgerAssemblyRecipe : ScriptableObject
             if (candidate.requiredIngredientPrefab == null) continue;
             if (candidate.nextStatePrefab == null) continue;
 
-            if (candidate.currentStatePrefab.name != currentStateName) continue;
-            if (candidate.requiredIngredientPrefab.name != heldItemName) continue;
+            if (NormalizePrefabName(candidate.currentStatePrefab.name) != normalizedCurrentStateName) continue;
+            if (NormalizePrefabName(candidate.requiredIngredientPrefab.name) != normalizedHeldItemName) continue;
 
             step = candidate;
             return true;
@@ -36,5 +39,11 @@ public class BurgerAssemblyRecipe : ScriptableObject
 
         step = null;
         return false;
+    }
+
+    private static string NormalizePrefabName(string name)
+    {
+        if (string.IsNullOrEmpty(name)) return name;
+        return name.Replace("(Clone)", "").Trim();
     }
 }

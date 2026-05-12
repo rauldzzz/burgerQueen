@@ -6,8 +6,10 @@ public class Counter_Hostess : Counter
     [Header("Hostess Settings")]
     public BurgerAssemblyRecipe defaultRecipe;
     public List<BurgerAssemblyRecipe> recipes = new List<BurgerAssemblyRecipe>();
-    public bool autoSpawnStartingState = true;
+    public bool autoSpawnStartingState = false;
     public OrdersManager ordersManager;
+    public Vector3 itemSpawnPosition = new Vector3(0, 1f, 0);
+    public float itemScale = 4f;
 
     protected override void Start()
     {
@@ -48,7 +50,12 @@ public class Counter_Hostess : Counter
 
         if (!HasItem())
         {
-            Debug.LogWarning($"[Counter_Hostess] Counter {name} is empty. It cannot advance the burger unless a starting state is spawned. Check Starting State Prefab and the first recipe step.");
+            if (TryPlaceStartingState(player))
+            {
+                return;
+            }
+
+            Debug.LogWarning($"[Counter_Hostess] Counter {name} is empty and the held item '{player.heldItemName}' does not match the starting state for the active recipe.");
             return;
         }
 
@@ -76,9 +83,43 @@ public class Counter_Hostess : Counter
         }
 
         GameObject nextState = Instantiate(step.nextStatePrefab);
-        PlaceItem(nextState, step.nextStatePrefab.name);
+        PlaceItemAt(nextState, step.nextStatePrefab.name, itemSpawnPosition);
 
         Debug.Log("Burger advanced to: " + step.nextStatePrefab.name);
+    }
+
+    public void PlaceItemAt(GameObject item, string itemName, Vector3 localPosition)
+    {
+        itemOnCounter = item;
+        itemNameOnCounter = itemName;
+        item.transform.SetParent(transform);
+        item.transform.localPosition = localPosition;
+        item.transform.localScale = Vector3.one * itemScale;
+    }
+
+    private bool TryPlaceStartingState(PlayerInteraction player)
+    {
+        BurgerAssemblyRecipe recipe = GetRecipeForCurrentOrder() ?? (defaultRecipe != null ? defaultRecipe : FindFirstRecipeWithStartingState());
+        if (recipe == null)
+        {
+            return false;
+        }
+
+        GameObject startingPrefab = recipe.startingStatePrefab;
+        if (startingPrefab == null || startingPrefab.name != player.heldItemName)
+        {
+            return false;
+        }
+
+        GameObject heldItem = player.Drop();
+        if (heldItem == null)
+        {
+            return false;
+        }
+
+        PlaceItemAt(heldItem, heldItem.name, itemSpawnPosition);
+        Debug.Log($"[Counter_Hostess] Placed starting state '{heldItem.name}' on empty {name}.");
+        return true;
     }
 
     private void EnsureStartingState()
@@ -104,7 +145,7 @@ public class Counter_Hostess : Counter
         }
 
         GameObject startingState = Instantiate(prefabToSpawn);
-        PlaceItem(startingState, prefabToSpawn.name);
+        PlaceItemAt(startingState, prefabToSpawn.name, itemSpawnPosition);
         Debug.Log($"[Counter_Hostess] Spawned starting state '{prefabToSpawn.name}' on {name}.");
     }
 
