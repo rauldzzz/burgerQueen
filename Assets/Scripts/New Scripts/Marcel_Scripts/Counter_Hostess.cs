@@ -13,28 +13,65 @@ public class Counter_Hostess : Counter
     {
         base.Start();
 
+        Debug.Log($"[Counter_Hostess] Start on {name}. autoSpawnStartingState={autoSpawnStartingState}, defaultRecipe={(defaultRecipe != null ? defaultRecipe.burgerName : "null")}, recipes={recipes.Count}");
+
+        if (ordersManager == null)
+        {
+            ordersManager = FindObjectOfType<OrdersManager>();
+        }
+
+        Debug.Log($"[Counter_Hostess] OrdersManager={(ordersManager != null ? ordersManager.name : "null")}, CurrentOrder={(ordersManager != null && ordersManager.CurrentOrder != null ? ordersManager.CurrentOrder.burgerName : "null")}");
+
         if (autoSpawnStartingState)
         {
             EnsureStartingState();
         }
+
+        Debug.Log($"[Counter_Hostess] After start setup: HasItem={HasItem()}, itemOnCounter={(itemOnCounter != null ? itemOnCounter.name : "null")}, itemNameOnCounter={(itemNameOnCounter ?? "null")}");
     }
 
     protected override void HandleInteraction(PlayerInteraction player)
     {
-        if (!player.IsHoldingItem()) return;
-        if (!HasItem()) return;
+        Debug.Log($"[Counter_Hostess] Interaction on {name}. player={(player != null ? player.name : "null")}, playerHolding={(player != null && player.IsHoldingItem())}, heldItem={(player != null && player.heldItem != null ? player.heldItem.name : "null")}, heldItemName={(player != null ? player.heldItemName : "null")}, counterHasItem={HasItem()}, counterItem={(itemOnCounter != null ? itemOnCounter.name : "null")}, counterItemName={(itemNameOnCounter ?? "null")}");
+
+        if (player == null)
+        {
+            Debug.LogWarning($"[Counter_Hostess] Null player on {name}.");
+            return;
+        }
+
+        if (!player.IsHoldingItem())
+        {
+            Debug.Log($"[Counter_Hostess] Player is not holding anything, nothing to advance on {name}.");
+            return;
+        }
+
+        if (!HasItem())
+        {
+            Debug.LogWarning($"[Counter_Hostess] Counter {name} is empty. It cannot advance the burger unless a starting state is spawned. Check Starting State Prefab and the first recipe step.");
+            return;
+        }
+
         BurgerAssemblyRecipe.BurgerAssemblyStep step = FindMatchingStep(itemNameOnCounter, player.heldItemName);
-        if (step == null) return;
+        if (step == null)
+        {
+            Debug.LogWarning($"[Counter_Hostess] No matching step found on {name} for currentState='{itemNameOnCounter}' and heldItem='{player.heldItemName}'.");
+            return;
+        }
+
+        Debug.Log($"[Counter_Hostess] Match found. currentState='{itemNameOnCounter}', heldItem='{player.heldItemName}', nextState='{step.nextStatePrefab.name}'");
 
         GameObject currentState = TakeItem();
         if (currentState != null)
         {
+            Debug.Log($"[Counter_Hostess] Destroying current counter item '{currentState.name}'.");
             Destroy(currentState);
         }
 
         GameObject heldItem = player.Drop();
         if (heldItem != null)
         {
+            Debug.Log($"[Counter_Hostess] Destroying player item '{heldItem.name}'.");
             Destroy(heldItem);
         }
 
@@ -47,12 +84,28 @@ public class Counter_Hostess : Counter
     private void EnsureStartingState()
     {
         if (HasItem()) return;
+
         BurgerAssemblyRecipe recipe = GetRecipeForCurrentOrder() ?? (defaultRecipe != null ? defaultRecipe : FindFirstRecipeWithStartingState());
         if (recipe == null) return;
-        if (recipe.startingStatePrefab == null) return;
 
-        GameObject startingState = Instantiate(recipe.startingStatePrefab);
-        PlaceItem(startingState, recipe.startingStatePrefab.name);
+        Debug.Log($"[Counter_Hostess] EnsureStartingState using recipe '{recipe.burgerName}'. startingState={(recipe.startingStatePrefab != null ? recipe.startingStatePrefab.name : "null")}");
+
+        GameObject prefabToSpawn = recipe.startingStatePrefab;
+        if (prefabToSpawn == null)
+        {
+            prefabToSpawn = FindFirstCurrentStatePrefab(recipe);
+            Debug.Log($"[Counter_Hostess] startingStatePrefab was null, fallback spawn candidate={(prefabToSpawn != null ? prefabToSpawn.name : "null")}");
+        }
+
+        if (prefabToSpawn == null)
+        {
+            Debug.LogWarning($"[Counter_Hostess] No starting prefab could be resolved for recipe '{recipe.burgerName}'. The hostess will remain empty.");
+            return;
+        }
+
+        GameObject startingState = Instantiate(prefabToSpawn);
+        PlaceItem(startingState, prefabToSpawn.name);
+        Debug.Log($"[Counter_Hostess] Spawned starting state '{prefabToSpawn.name}' on {name}.");
     }
 
     private BurgerAssemblyRecipe FindFirstRecipeWithStartingState()
@@ -69,12 +122,28 @@ public class Counter_Hostess : Counter
         return null;
     }
 
+    private GameObject FindFirstCurrentStatePrefab(BurgerAssemblyRecipe recipe)
+    {
+        if (recipe == null) return null;
+
+        for (int i = 0; i < recipe.steps.Count; i++)
+        {
+            BurgerAssemblyRecipe.BurgerAssemblyStep step = recipe.steps[i];
+            if (step == null) continue;
+            if (step.currentStatePrefab != null) return step.currentStatePrefab;
+            if (step.nextStatePrefab != null) return step.nextStatePrefab;
+        }
+
+        return null;
+    }
+
     private BurgerAssemblyRecipe.BurgerAssemblyStep FindMatchingStep(string currentStateName, string heldItemName)
     {
         // 1) Try to use the recipe currently selected by OrdersManager (preferred)
         BurgerAssemblyRecipe orderRecipe = GetRecipeForCurrentOrder();
         if (orderRecipe != null && orderRecipe.TryGetStep(currentStateName, heldItemName, out BurgerAssemblyRecipe.BurgerAssemblyStep orderStep))
         {
+            Debug.Log($"[Counter_Hostess] Matched by current order recipe '{orderRecipe.burgerName}'.");
             return orderStep;
         }
 
@@ -82,6 +151,7 @@ public class Counter_Hostess : Counter
         BurgerAssemblyRecipe recipe = defaultRecipe;
         if (recipe != null && recipe.TryGetStep(currentStateName, heldItemName, out BurgerAssemblyRecipe.BurgerAssemblyStep step))
         {
+            Debug.Log($"[Counter_Hostess] Matched by defaultRecipe '{recipe.burgerName}'.");
             return step;
         }
 
@@ -93,10 +163,12 @@ public class Counter_Hostess : Counter
 
             if (recipe.TryGetStep(currentStateName, heldItemName, out BurgerAssemblyRecipe.BurgerAssemblyStep matchingStep))
             {
+                Debug.Log($"[Counter_Hostess] Matched by recipes list '{recipe.burgerName}'.");
                 return matchingStep;
             }
         }
 
+        Debug.LogWarning($"[Counter_Hostess] No recipe matched currentState='{currentStateName}' and heldItem='{heldItemName}'.");
         return null;
     }
 
@@ -108,13 +180,22 @@ public class Counter_Hostess : Counter
             ordersManager = FindObjectOfType<OrdersManager>();
         }
 
-        if (ordersManager == null) return null;
+        if (ordersManager == null)
+        {
+            Debug.LogWarning($"[Counter_Hostess] No OrdersManager found in scene.");
+            return null;
+        }
 
         var current = ordersManager.CurrentOrder;
-        if (current == null) return null;
+        if (current == null)
+        {
+            Debug.LogWarning($"[Counter_Hostess] OrdersManager '{ordersManager.name}' has no CurrentOrder yet.");
+            return null;
+        }
 
         // Match by burgerName
         string orderName = current.burgerName;
+        Debug.Log($"[Counter_Hostess] Resolving recipe for CurrentOrder='{orderName}'.");
         if (defaultRecipe != null && defaultRecipe.burgerName == orderName) return defaultRecipe;
 
         for (int i = 0; i < recipes.Count; i++)
@@ -124,6 +205,7 @@ public class Counter_Hostess : Counter
             if (r.burgerName == orderName) return r;
         }
 
+        Debug.LogWarning($"[Counter_Hostess] No BurgerAssemblyRecipe found with burgerName='{orderName}'. Check names against OrdersManager and the recipe assets.");
         return null;
     }
 }
