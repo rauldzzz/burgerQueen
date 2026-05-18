@@ -10,9 +10,9 @@ public class PlayerInteraction : MonoBehaviour
     public void PickUp(GameObject item, string itemName)
     {
         heldItem = item;
-        heldItemName = itemName;
+        heldItemName = Counter.NormalizeItemName(itemName);
         item.transform.SetParent(transform);
-        item.transform.localPosition = new Vector3(0, 13f, 3f); // increase Y here
+        item.transform.localPosition = new Vector3(0, 13f, 3f);
     }
 
     public GameObject Drop()

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d679f7757e133045b639928334524ee, type: 3}
+  m_Name: CheeseBurgerSteps
+  m_EditorClassIdentifier: Assembly-CSharp::BurgerAssemblyRecipe
+  burgerName: CheeseBurger
+  startingStatePrefab: {fileID: 919132149155446097, guid: 3c442f99ad7766f45bea376d6e84fcd2, type: 3}
+  steps:
+  - currentStatePrefab: {fileID: 0}
+    requiredIngredientPrefab: {fileID: 919132149155446097, guid: 3c442f99ad7766f45bea376d6e84fcd2, type: 3}
+    nextStatePrefab: {fileID: 919132149155446097, guid: 3c442f99ad7766f45bea376d6e84fcd2, type: 3}
+  - currentStatePrefab: {fileID: 919132149155446097, guid: 3c442f99ad7766f45bea376d6e84fcd2, type: 3}
+    requiredIngredientPrefab: {fileID: 919132149155446097, guid: f57b35f5fe4d40845802ac45c6f7be6a, type: 3}
+    nextStatePrefab: {fileID: 6673909743972267991, guid: 6d7d1b0bec6461946b92a1fa3e663562, type: 3}
+  - currentStatePrefab: {fileID: 6673909743972267991, guid: 6d7d1b0bec6461946b92a1fa3e663562, type: 3}
+    requiredIngredientPrefab: {fileID: 919132149155446097, guid: 0dfa1625b22aaf24794e079afac053cb, type: 3}
+    nextStatePrefab: {fileID: 1358681785509203379, guid: e482b45720d3d7549b4c35cc4fc92f06, type: 3}
+  - currentStatePrefab: {fileID: 1358681785509203379, guid: e482b45720d3d7549b4c35cc4fc92f06, type: 3}
+    requiredIngredientPrefab: {fileID: 919132149155446097, guid: 7530c38ff2c25764e85d4fb64ae5611d, type: 3}
+    nextStatePrefab: {fileID: 1898651092033074079, guid: 48a6e847fd2adfd46ac7a46b50fd5c02, type: 3}
+  - currentStatePrefab: {fileID: 1898651092033074079, guid: 48a6e847fd2adfd46ac7a46b50fd5c02, type: 3}
+    requiredIngredientPrefab: {fileID: 919132149155446097, guid: 872a9b168c0aeef45a19703199b0cf40, type: 3}
+    nextStatePrefab: {fileID: 7578499036853901624, guid: b20640fe5379c274887194bbd80968a1, type: 3}

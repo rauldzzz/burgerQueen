@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff94e719d2676ef49a8c5a8e1a1bc40a, type: 3}
+  m_Name: SingleBurger
+  m_EditorClassIdentifier: Assembly-CSharp::BurgerRecipe
+  burgerName: SingleBurger
+  burger: {fileID: 6845100841486814325, guid: 2167878878a6f9545a85d8a8d0a05cdf, type: 3}
+  reward: 25
+  finalBurgerImage: {fileID: 21300000, guid: 70c893a56d8e5354d9fa53c76ef45b0f, type: 3}
+  ingredientImages:
+  - {fileID: 21300000, guid: 10232ac9b96a0d44281a317134cbc6da, type: 3}
+  - {fileID: 21300000, guid: 7d3900ea85ede754a9f85fa6e49fc6c9, type: 3}
+  - {fileID: 21300000, guid: a46497d53d5a73f4b8fde78b895d8e80, type: 3}
+  - {fileID: 21300000, guid: 1e1b0996d8ee81640acce5e7ee2bce9e, type: 3}

@@ -22,11 +22,11 @@ public class Counter_Plate : Counter
     {
         if (!hasPlate)
         {
-            // No plate yet — only accept a plate
-            if (player.IsHoldingItem() && player.heldItemName == "Plate")
+            // No plate yet ï¿½ only accept a plate
+            if (player.IsHoldingItem() && Counter.NormalizeItemName(player.heldItemName) == "Plate")
             {
                 GameObject dropped = player.Drop();
-                PlaceItem(dropped, "Plate");
+                PlaceItem(dropped, Counter.NormalizeItemName("Plate"));
                 hasPlate = true;
                 Debug.Log("Plate placed on counter.");
             }
@@ -41,10 +41,10 @@ public class Counter_Plate : Counter
         }
         else
         {
-            // Plate is here — accept ingredients
-            if (player.IsHoldingItem() && player.heldItemName != "Plate")
+            // Plate is here ï¿½ accept ingredients
+            if (player.IsHoldingItem() && Counter.NormalizeItemName(player.heldItemName) != "Plate")
             {
-                string ingredient = player.heldItemName;
+                string ingredient = Counter.NormalizeItemName(player.heldItemName);
                 GameObject dropped = player.Drop();
                 Destroy(dropped); // Ingredient merges into plate visually
                 ingredientsOnPlate.Add(ingredient);
@@ -90,14 +90,12 @@ public class Counter_Plate : Counter
 
     private void CompleteDish(PlateRecipe recipe)
     {
-        // Destroy the plate on the counter
         if (itemOnCounter != null)
             Destroy(itemOnCounter);
 
-        // Spawn the completed dish
         GameObject dish = Instantiate(recipe.completedDishPrefab);
         dish.transform.localScale = recipe.outputScale;
-        PlaceItem(dish, recipe.completedDishPrefab.name);
+        PlaceItem(dish, Counter.NormalizeItemName(recipe.completedDishPrefab.name));
 
         ingredientsOnPlate.Clear();
         hasPlate = false;
