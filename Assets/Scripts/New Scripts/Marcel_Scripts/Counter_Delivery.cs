@@ -9,7 +9,7 @@ public class Counter_Delivery : Counter
         OrdersManager orderManager = FindObjectOfType<OrdersManager>();
         if (orderManager == null) return;
 
-        bool success = orderManager.CompleteOrder(player.heldItemName);
+        bool success = orderManager.CompleteOrder(Counter.NormalizeItemName(player.heldItemName));
 
         if (success)
         {

@@ -30,16 +30,27 @@ public class OrdersManager : MonoBehaviour
         currentOrder = possibleOrders[Random.Range(0, possibleOrders.Count)];
 
         UpdateUI();
-        Debug.Log("New order: " + currentOrder.burgerName);
+        Debug.Log("OrdersManager: New order generated: " + currentOrder.burgerName + " (reward=" + currentOrder.reward + ")");
     }
 
     public bool CompleteOrder(string submittedBurgerName)
     {
-        if (currentOrder == null) return false;
+        if (currentOrder == null)
+        {
+            Debug.LogWarning("OrdersManager: CompleteOrder called but no currentOrder is set.");
+            return false;
+        }
 
         if (submittedBurgerName == currentOrder.burgerName)
         {
-            FindObjectOfType<ScoreManager>().AddMoney(currentOrder.reward);
+            Debug.Log("OrdersManager: Order completed! +" + currentOrder.reward + " points.");
+            
+            ScoreManager scoreManager = FindObjectOfType<ScoreManager>();
+            if (scoreManager != null)
+                scoreManager.AddMoney(currentOrder.reward);
+            else
+                Debug.LogWarning("OrdersManager: ScoreManager not found in scene!");
+            
             GenerateNewOrder();
             return true;
         }
