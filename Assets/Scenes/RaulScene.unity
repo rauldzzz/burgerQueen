@@ -131,6 +131,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: WhiteHand
       objectReference: {fileID: 0}
+    - target: {fileID: 497982216308674865, guid: 930b7a19d446f4b4c9c810e37e84e625, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 5636b7672878e5a429287ab682fe18ed, type: 2}
     - target: {fileID: 705561775665358165, guid: 930b7a19d446f4b4c9c810e37e84e625, type: 3}
       propertyPath: m_LocalScale.x
       value: 4
@@ -12529,14 +12533,14 @@ MonoBehaviour:
   calibrationUI: {fileID: 1348552534}
   trackingInterface: {fileID: 1348552532}
   enableTracking: 0
-  numberOfPlayers: 3
+  numberOfPlayers: 2
   numberOfBaseStations: 4
   enableRotation: 1
   enableYAxis: 1
   virtualWorldSpace: {x: 100, y: 1, z: 100}
   players:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 228490725}
+  - {fileID: 1990416283}
   - {fileID: 1470091493}
   - {fileID: 181433387}
   calibrationSaveFilePath: D:\Calibration\Eje Z
@@ -12599,7 +12603,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1287487524}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}

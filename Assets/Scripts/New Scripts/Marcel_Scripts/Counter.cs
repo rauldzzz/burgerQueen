@@ -12,7 +12,7 @@ public class Counter : MonoBehaviour
     private Collider counterCollider;
 
     public bool HasItem() => itemOnCounter != null;
-
+    private bool waitingForPlayerToLeave = false;
     public static string NormalizeItemName(string name)
     {
         if (string.IsNullOrEmpty(name)) return name;
@@ -58,7 +58,6 @@ public class Counter : MonoBehaviour
         foreach (Collider hit in hits)
         {
             if (!hit.CompareTag("Player")) continue;
-
             PlayerInteraction p = hit.GetComponent<PlayerInteraction>();
             if (p != null)
             {
@@ -69,7 +68,7 @@ public class Counter : MonoBehaviour
 
         if (foundPlayer != null)
         {
-            if (playerInside == null)
+            if (playerInside == null && !waitingForPlayerToLeave)
             {
                 playerInside = foundPlayer;
                 timer = 0f;
@@ -78,19 +77,22 @@ public class Counter : MonoBehaviour
 
             timer += Time.deltaTime;
 
-            if (timer >= interactDelay)
+            if (timer >= interactDelay && playerInside != null)
             {
                 HandleInteraction(playerInside);
+                playerInside = null;
                 timer = 0f;
+                waitingForPlayerToLeave = true; // block re-detection
             }
         }
         else
         {
-            if (playerInside != null)
+            if (playerInside != null || waitingForPlayerToLeave)
             {
                 Debug.Log("Player left: " + gameObject.name);
                 playerInside = null;
                 timer = 0f;
+                waitingForPlayerToLeave = false; // player left, allow again
             }
         }
     }
