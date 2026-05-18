@@ -39,7 +39,7 @@ public class Counter_Processor : Counter
         if (!player.IsHoldingItem()) return;
 
         // Check if held item matches any recipe
-        ProcessRecipe match = recipes.Find(r => r.inputPrefab.name == player.heldItemName);
+        ProcessRecipe match = recipes.Find(r => Counter.NormalizeItemName(r.inputPrefab.name) == Counter.NormalizeItemName(player.heldItemName));
 
         if (match != null)
         {

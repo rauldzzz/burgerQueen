@@ -31,21 +31,9 @@ public class PlayerInteraction : MonoBehaviour
 
         // Then give the item
         heldItem = item;
-        heldItemName = itemName;
+        heldItemName = Counter.NormalizeItemName(itemName);
         item.transform.SetParent(transform);
         item.transform.localPosition = new Vector3(0, 13f, 3f);
-    }
-
-    private float GetAnimationLength(string clipName)
-    {
-        if (handAnimator == null) return 0f;
-
-        foreach (AnimationClip clip in handAnimator.runtimeAnimatorController.animationClips)
-        {
-            if (clip.name == clipName)
-                return clip.length;
-        }
-        return 0.3f; // fallback
     }
 
     public GameObject Drop()

@@ -13,6 +13,12 @@ public class Counter : MonoBehaviour
 
     public bool HasItem() => itemOnCounter != null;
 
+    public static string NormalizeItemName(string name)
+    {
+        if (string.IsNullOrEmpty(name)) return name;
+        return name.Replace("(Clone)", "").Trim();
+    }
+
     protected virtual void Start()
     {
         counterCollider = GetComponent<Collider>();
@@ -21,7 +27,7 @@ public class Counter : MonoBehaviour
     public virtual void PlaceItem(GameObject item, string itemName)
     {
         itemOnCounter = item;
-        itemNameOnCounter = itemName;
+        itemNameOnCounter = NormalizeItemName(itemName);
         item.transform.SetParent(transform);
         item.transform.localPosition = new Vector3(0, 1f, 0);
     }
