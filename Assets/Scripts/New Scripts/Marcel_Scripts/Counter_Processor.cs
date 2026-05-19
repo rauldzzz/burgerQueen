@@ -16,6 +16,7 @@ public class Counter_Processor : Counter
 
     private bool isProcessing = false;
     private ProcessRecipe activeRecipe = null;
+    private PlayerInteraction processingPlayer = null;
 
     protected override void Update()
     {
@@ -44,6 +45,7 @@ public class Counter_Processor : Counter
         if (match != null)
         {
             activeRecipe = match;
+            processingPlayer = player;  // Store the player reference that's being processed
             isProcessing = true;
             timer = 0f;
             Debug.Log("Processing: " + match.inputPrefab.name);
@@ -57,18 +59,19 @@ public class Counter_Processor : Counter
     private void FinishProcessing()
     {
         if (activeRecipe == null) return;
-        if (playerInside == null) return;
+        if (processingPlayer == null) return;
 
         // Destroy the current held item
-        Destroy(playerInside.heldItem);
+        Destroy(processingPlayer.heldItem);
 
         // Spawn the output and give it to the player
         GameObject output = Instantiate(activeRecipe.outputPrefab);
         output.transform.localScale = activeRecipe.outputScale;
-        playerInside.PickUp(output, activeRecipe.outputPrefab.name);
+        processingPlayer.PickUp(output, activeRecipe.outputPrefab.name);
 
         isProcessing = false;
         activeRecipe = null;
-        Debug.Log("Processing done: " + activeRecipe?.outputPrefab.name);
+        processingPlayer = null;
+        Debug.Log("Processing done");
     }
 }
