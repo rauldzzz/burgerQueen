@@ -1,17 +1,18 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StartScreenManager : MonoBehaviour
 {
-    public PlayerSpot spot1;
-    public PlayerSpot spot2;
+    public PlayerSpot player1Spot;
+    public PlayerSpot player2Spot;
 
     private bool gameStarted = false;
 
     void Update()
     {
         if (!gameStarted &&
-            spot1.occupied &&
-            spot2.occupied)
+            player1Spot.occupied &&
+            player2Spot.occupied)
         {
             gameStarted = true;
             StartGame();
@@ -22,10 +23,6 @@ public class StartScreenManager : MonoBehaviour
     {
         Debug.Log("GAME START");
 
-        // aquí podeu:
-        // amagar el canvas
-        // començar temporitzador
-        // activar controls
-        // etc.
+        SceneManager.LoadScene("RaulScene");
     }
 }
