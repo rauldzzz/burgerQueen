@@ -3,6 +3,8 @@ using TMPro;
 
 public class ScoreManager : MonoBehaviour
 {
+    public static ScoreManager Instance;
+
     [Header("Score Settings")]
     public TextMeshProUGUI moneyText;
 
@@ -12,8 +14,11 @@ public class ScoreManager : MonoBehaviour
     {
         currentMoney += amount;
         UpdateUI();
+    }
 
-    
+    public int GetMoney()
+    {
+        return currentMoney;
     }
 
     private void UpdateUI()

@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Timer : MonoBehaviour
 {
@@ -39,8 +40,9 @@ public class Timer : MonoBehaviour
     {
         Debug.Log("Temps acabat!");
 
-        Time.timeScale = 0f;
+        GameManager.Instance.totalMoney +=
+            ScoreManager.Instance.GetMoney();
 
-        //Es pot afegir pantalla game over, guardar puntuació, actualització monedes, etc
+        SceneManager.LoadScene("UpgradeShop");
     }
 }
