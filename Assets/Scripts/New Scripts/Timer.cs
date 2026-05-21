@@ -40,9 +40,24 @@ public class Timer : MonoBehaviour
     {
         Debug.Log("Temps acabat!");
 
-        GameManager.Instance.totalMoney +=
-            ScoreManager.Instance.GetMoney();
+        if (GameManager.Instance != null && ScoreManager.Instance != null)
+        {
+            int gained = ScoreManager.Instance.GetMoney();
+            GameManager.Instance.totalMoney += gained;
+            Debug.Log($"Timer: Round ended. Added ${gained} to total money (now ${GameManager.Instance.totalMoney}).");
 
-        SceneManager.LoadScene("UpgradeShop");
+            if (GameManager.Instance.currentRound >= GameManager.Instance.totalRounds)
+            {
+                GameManager.Instance.EndSession();
+                return;
+            }
+
+            Debug.Log($"Timer: Loading upgrade scene {GameManager.Instance.upgradeSceneName}.");
+            SceneManager.LoadScene(GameManager.Instance.upgradeSceneName);
+        }
+        else
+        {
+            SceneManager.LoadScene("UpgradeShop");
+        }
     }
 }

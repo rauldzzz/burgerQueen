@@ -20,7 +20,21 @@ public class OrdersManager : MonoBehaviour
 
     void Start()
     {
+        ApplyGameUpgrades();
         GenerateNewOrder();
+    }
+
+    private void ApplyGameUpgrades()
+    {
+        if (GameManager.Instance == null)
+            return;
+
+        if (GameManager.Instance.unlockCheeseBurger && GameManager.Instance.cheeseBurgerRecipe != null)
+        {
+            if (!possibleOrders.Contains(GameManager.Instance.cheeseBurgerRecipe))
+                possibleOrders.Add(GameManager.Instance.cheeseBurgerRecipe);
+            Debug.Log("OrdersManager: Applied game upgrades - cheese burger unlocked.");
+        }
     }
 
     public void GenerateNewOrder()

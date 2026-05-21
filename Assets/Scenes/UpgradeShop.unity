@@ -3247,8 +3247,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: $0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4963235b614abd148befddc1d2410133, type: 2}
+  m_sharedMaterial: {fileID: 5979713049659211553, guid: 4963235b614abd148befddc1d2410133, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3272,7 +3272,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.2
+  m_fontSize: 25.6
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -6003,6 +6003,7 @@ GameObject:
   - component: {fileID: 721042685}
   - component: {fileID: 721042684}
   - component: {fileID: 721042686}
+  - component: {fileID: 721042687}
   m_Layer: 0
   m_Name: ExtraCuttingZone
   m_TagString: Untagged
@@ -6103,12 +6104,32 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 100, z: 1.0000007}
   m_Center: {x: -3.5527137e-15, y: 0.000015258789, z: 0.000000089406925}
+--- !u!114 &721042687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721042682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d08957c5815eb6409f420121e0ca3d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
+  upgradeType: 0
+  price: 100
+  holdDuration: 2
+  priceText: {fileID: 1778135168}
+  targetRenderer: {fileID: 721042684}
+  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  disabledColor: {r: 1, g: 0, b: 0, a: 1}
+  isSelected: 0
 --- !u!1 &722061502
 GameObject:
   m_ObjectHideFlags: 0
@@ -6656,7 +6677,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &780461468
 Transform:
   m_ObjectHideFlags: 0
@@ -7120,7 +7141,7 @@ Transform:
   m_GameObject: {fileID: 850267786}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.85, y: 11.8, z: 5.62}
+  m_LocalPosition: {x: -13.85, y: 11.8, z: 4}
   m_LocalScale: {x: 0.46893328, y: 0.4689333, z: 0.4689333}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7212,6 +7233,7 @@ GameObject:
   - component: {fileID: 859985840}
   - component: {fileID: 859985839}
   - component: {fileID: 859985841}
+  - component: {fileID: 859985842}
   m_Layer: 0
   m_Name: Continue Button
   m_TagString: Untagged
@@ -7311,12 +7333,28 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1.0000001, y: 100, z: 1.0000007}
   m_Center: {x: 0.000000059604645, y: 0.00001335144, z: 0.0000006258487}
+--- !u!114 &859985842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 859985837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c473e1b43f88d2468fd24f6fefd201a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeShopManager
+  continueHoldDuration: 2
+  moneyText: {fileID: 397339601}
+  continueRenderer: {fileID: 859985839}
+  continueReadyColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1001 &862577686
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10085,6 +10123,7 @@ GameObject:
   - component: {fileID: 1156683464}
   - component: {fileID: 1156683463}
   - component: {fileID: 1156683465}
+  - component: {fileID: 1156683466}
   m_Layer: 0
   m_Name: NewRecipeButton
   m_TagString: Untagged
@@ -10185,12 +10224,32 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 100, z: 1.0000007}
   m_Center: {x: 0.00000011920929, y: 0.000022888184, z: -0.00000017881398}
+--- !u!114 &1156683466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1156683461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d08957c5815eb6409f420121e0ca3d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
+  upgradeType: 0
+  price: 100
+  holdDuration: 2
+  priceText: {fileID: 194556801}
+  targetRenderer: {fileID: 1156683463}
+  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  disabledColor: {r: 1, g: 0, b: 0, a: 1}
+  isSelected: 0
 --- !u!1001 &1157908317
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11463,6 +11522,7 @@ GameObject:
   - component: {fileID: 1307597518}
   - component: {fileID: 1307597517}
   - component: {fileID: 1307597519}
+  - component: {fileID: 1307597520}
   m_Layer: 0
   m_Name: ExtraServingZone
   m_TagString: Untagged
@@ -11563,12 +11623,32 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 100, z: 1.0000007}
   m_Center: {x: -3.5527137e-15, y: 0.000022888184, z: -0.00000017881398}
+--- !u!114 &1307597520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1307597515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d08957c5815eb6409f420121e0ca3d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
+  upgradeType: 0
+  price: 100
+  holdDuration: 2
+  priceText: {fileID: 194798564}
+  targetRenderer: {fileID: 1307597517}
+  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  disabledColor: {r: 1, g: 0, b: 0, a: 1}
+  isSelected: 0
 --- !u!1 &1324969462
 GameObject:
   m_ObjectHideFlags: 0
@@ -12001,6 +12081,7 @@ GameObject:
   - component: {fileID: 1369474755}
   - component: {fileID: 1369474754}
   - component: {fileID: 1369474756}
+  - component: {fileID: 1369474757}
   m_Layer: 0
   m_Name: BetterPanButton
   m_TagString: Untagged
@@ -12101,12 +12182,32 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 100, z: 1.0000007}
   m_Center: {x: 0.00000011920929, y: 0.000015258789, z: 0.00000014901157}
+--- !u!114 &1369474757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369474752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d08957c5815eb6409f420121e0ca3d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
+  upgradeType: 0
+  price: 100
+  holdDuration: 2
+  priceText: {fileID: 1674588923}
+  targetRenderer: {fileID: 1369474754}
+  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  disabledColor: {r: 1, g: 0, b: 0, a: 1}
+  isSelected: 0
 --- !u!1 &1387414603
 GameObject:
   m_ObjectHideFlags: 0
@@ -14353,7 +14454,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1851028487
 MonoBehaviour:
   m_ObjectHideFlags: 0

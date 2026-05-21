@@ -8,9 +8,20 @@ public class StartScreenManager : MonoBehaviour
 
     private bool gameStarted = false;
 
+    void Start()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.ResetGame();
+            Debug.Log("StartScreenManager: Called GameManager.ResetGame().");
+        }
+    }
+
     void Update()
     {
         if (!gameStarted &&
+            player1Spot != null &&
+            player2Spot != null &&
             player1Spot.occupied &&
             player2Spot.occupied)
         {
@@ -23,6 +34,13 @@ public class StartScreenManager : MonoBehaviour
     {
         Debug.Log("GAME START");
 
-        SceneManager.LoadScene("RaulScene");
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.StartRound();
+        }
+        else
+        {
+            SceneManager.LoadScene("RaulScene");
+        }
     }
 }

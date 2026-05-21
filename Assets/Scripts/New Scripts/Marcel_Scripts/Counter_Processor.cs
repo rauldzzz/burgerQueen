@@ -48,7 +48,7 @@ public class Counter_Processor : Counter
             processingPlayer = player;  // Store the player reference that's being processed
             isProcessing = true;
             timer = 0f;
-            Debug.Log("Processing: " + match.inputPrefab.name);
+            Debug.Log($"Counter_Processor: Starting processing {match.inputPrefab.name} for player {player.name} on {gameObject.name}.");
         }
         else
         {
@@ -72,6 +72,6 @@ public class Counter_Processor : Counter
         isProcessing = false;
         activeRecipe = null;
         processingPlayer = null;
-        Debug.Log("Processing done");
+        Debug.Log($"Counter_Processor: Finished processing on {gameObject.name}.");
     }
 }

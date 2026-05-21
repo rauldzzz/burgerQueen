@@ -10,6 +10,7 @@ public class Counter : MonoBehaviour
     protected float timer = 0f;
     protected PlayerInteraction playerInside = null;
     private Collider counterCollider;
+    protected float originalInteractDelay = 1f;
 
     public bool HasItem() => itemOnCounter != null;
     private bool waitingForPlayerToLeave = false;
@@ -19,9 +20,27 @@ public class Counter : MonoBehaviour
         return name.Replace("(Clone)", "").Trim();
     }
 
+    protected virtual void Awake()
+    {
+        originalInteractDelay = interactDelay;
+        Debug.Log($"Counter: Awake on {gameObject.name}, originalInteractDelay={originalInteractDelay}.");
+    }
+
     protected virtual void Start()
     {
         counterCollider = GetComponent<Collider>();
+    }
+
+    public void ApplyInteractDelayMultiplier(float multiplier)
+    {
+        interactDelay = originalInteractDelay * multiplier;
+        Debug.Log($"Counter: ApplyInteractDelayMultiplier on {gameObject.name} -> interactDelay={interactDelay} (mult={multiplier}).");
+    }
+
+    public void ResetInteractDelay()
+    {
+        interactDelay = originalInteractDelay;
+        Debug.Log($"Counter: ResetInteractDelay on {gameObject.name} -> interactDelay={interactDelay}.");
     }
 
     public virtual void PlaceItem(GameObject item, string itemName)
@@ -30,6 +49,7 @@ public class Counter : MonoBehaviour
         itemNameOnCounter = NormalizeItemName(itemName);
         item.transform.SetParent(transform);
         item.transform.localPosition = new Vector3(0, 1f, 0);
+        Debug.Log($"Counter: Placed item {itemNameOnCounter} on {gameObject.name}.");
     }
 
     public virtual GameObject TakeItem()
@@ -40,6 +60,7 @@ public class Counter : MonoBehaviour
         item.transform.SetParent(null);
         itemOnCounter = null;
         itemNameOnCounter = null;
+        Debug.Log($"Counter: Item taken from {gameObject.name}.");
         return item;
     }
 
@@ -103,11 +124,13 @@ public class Counter : MonoBehaviour
         {
             GameObject dropped = player.Drop();
             PlaceItem(dropped, dropped.name);
+            Debug.Log($"Counter: Player {player.name} placed item on {gameObject.name}.");
         }
         else if (!player.IsHoldingItem() && HasItem())
         {
             GameObject item = TakeItem();
             player.PickUp(item, item.name);
+            Debug.Log($"Counter: Player {player.name} picked up item from {gameObject.name}.");
         }
     }
 }

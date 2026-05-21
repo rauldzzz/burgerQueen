@@ -10,10 +10,18 @@ public class ScoreManager : MonoBehaviour
 
     private int currentMoney = 0;
 
+    private void Awake()
+    {
+        Instance = this;
+        UpdateUI();
+        Debug.Log($"ScoreManager: Awake, currentMoney=${currentMoney}.");
+    }
+
     public void AddMoney(int amount)
     {
         currentMoney += amount;
         UpdateUI();
+        Debug.Log($"ScoreManager: Added ${amount}, currentMoney=${currentMoney}.");
     }
 
     public int GetMoney()
