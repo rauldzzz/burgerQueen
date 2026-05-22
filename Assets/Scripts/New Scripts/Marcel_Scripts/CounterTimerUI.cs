@@ -25,6 +25,12 @@ public class CounterTimerUI : MonoBehaviour
 
     public void UpdateFill(float current, float max)
     {
+        if (max <= 0f)
+        {
+            fillImage.fillAmount = 1f;
+            return;
+        }
+
         fillImage.fillAmount = current / max;
     }
 }

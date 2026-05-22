@@ -42,11 +42,9 @@ public class Timer : MonoBehaviour
 
         if (GameManager.Instance != null && ScoreManager.Instance != null)
         {
-            int gained = ScoreManager.Instance.GetMoney();
-            GameManager.Instance.totalMoney += gained;
-            GameManager.cachedMoney = GameManager.Instance.totalMoney;
+            GameManager.cachedMoney = GameManager.Instance.currentMoney;
             GameManager.hasCachedMoney = true;
-            Debug.Log($"Timer: Round ended. Added ${gained} to total money (now ${GameManager.Instance.totalMoney}).");
+            Debug.Log($"Timer: Round ended. currentMoney=${GameManager.Instance.currentMoney}, totalMoney={GameManager.Instance.totalMoney}.");
 
             if (GameManager.Instance.currentRound >= GameManager.Instance.totalRounds)
             {

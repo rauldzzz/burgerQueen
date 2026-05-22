@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public static int cachedMoney = 0;
     public static bool hasCachedMoney = false;
+    // When false, money will not be persisted across app restarts (PlayerPrefs disabled)
+    public static bool persistMoney = false;
     public static bool resumeAfterUpgrade = false;
 
     private const string PrefsTotalMoneyKey = "BQ_TotalMoney";
@@ -24,6 +26,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Money")]
     public int totalMoney = 0;
+    public int currentMoney = 0;
 
     [Header("Upgrades")]
     public bool unlockCheeseBurger = false;
@@ -51,17 +54,20 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             Debug.Log("GameManager: instance created and marked DontDestroyOnLoad.");
 
-            if (!hasCachedMoney && PlayerPrefs.HasKey(PrefsHasCachedMoneyKey))
+            if (persistMoney)
             {
-                hasCachedMoney = PlayerPrefs.GetInt(PrefsHasCachedMoneyKey, 0) == 1;
-                cachedMoney = PlayerPrefs.GetInt(PrefsTotalMoneyKey, 0);
-                Debug.Log($"GameManager: Loaded cached money from PlayerPrefs=${cachedMoney}, hasCachedMoney={hasCachedMoney}.");
+                if (!hasCachedMoney && PlayerPrefs.HasKey(PrefsHasCachedMoneyKey))
+                {
+                    hasCachedMoney = PlayerPrefs.GetInt(PrefsHasCachedMoneyKey, 0) == 1;
+                    cachedMoney = PlayerPrefs.GetInt(PrefsTotalMoneyKey, 0);
+                    Debug.Log($"GameManager: Loaded cached money from PlayerPrefs=${cachedMoney}, hasCachedMoney={hasCachedMoney}.");
+                }
             }
 
             if (hasCachedMoney)
             {
-                totalMoney = cachedMoney;
-                Debug.Log($"GameManager: Restored cached money=${cachedMoney} on Awake.");
+                currentMoney = cachedMoney;
+                Debug.Log($"GameManager: Restored cached current money=${cachedMoney} on Awake.");
             }
 
             if (PlayerPrefs.GetInt(PrefsResumeAfterUpgradeKey, 0) == 1)
@@ -85,6 +91,7 @@ public class GameManager : MonoBehaviour
                 Debug.Log("GameManager: Resuming next round after upgrade shop.");
                 StartRound();
             }
+            Debug.Log($"GameManager: Awake finished -> totalMoney={totalMoney}, currentMoney={currentMoney}, cachedMoney={cachedMoney}, hasCachedMoney={hasCachedMoney}, currentRound={currentRound}");
         }
         else
         {
@@ -97,6 +104,7 @@ public class GameManager : MonoBehaviour
     {
         currentRound = 0;
         totalMoney = 0;
+        currentMoney = 0;
         cachedMoney = 0;
         hasCachedMoney = false;
         resumeAfterUpgrade = false;
@@ -110,17 +118,28 @@ public class GameManager : MonoBehaviour
 
     public bool CanAfford(int price)
     {
-        return totalMoney >= price;
+        return currentMoney >= price;
     }
 
     public void SpendMoney(int amount)
     {
-        totalMoney -= amount;
-        if (totalMoney < 0)
-            totalMoney = 0;
-        cachedMoney = totalMoney;
+        currentMoney -= amount;
+        if (currentMoney < 0)
+            currentMoney = 0;
+        cachedMoney = currentMoney;
         hasCachedMoney = true;
-        SaveCachedMoney();
+        if (persistMoney) SaveCachedMoney();
+    }
+
+    public void AddEarnings(int amount)
+    {
+        if (amount <= 0) return;
+
+        totalMoney += amount;
+        currentMoney += amount;
+        cachedMoney = currentMoney;
+        hasCachedMoney = true;
+        if (persistMoney) SaveCachedMoney();
     }
 
     public void StartRound()
@@ -147,6 +166,7 @@ public class GameManager : MonoBehaviour
 
     public static void SaveCachedMoney()
     {
+        if (!persistMoney) return;
         PlayerPrefs.SetInt(PrefsTotalMoneyKey, cachedMoney);
         PlayerPrefs.SetInt(PrefsHasCachedMoneyKey, hasCachedMoney ? 1 : 0);
         PlayerPrefs.Save();
@@ -162,6 +182,16 @@ public class GameManager : MonoBehaviour
 
     public static void ClearCachedMoney()
     {
+        if (!persistMoney)
+        {
+            // If persistence is disabled, just clear runtime values
+            cachedMoney = 0;
+            hasCachedMoney = false;
+            resumeAfterUpgrade = false;
+            Debug.Log("GameManager: Persistence disabled; cleared runtime cached money.");
+            return;
+        }
+
         PlayerPrefs.DeleteKey(PrefsTotalMoneyKey);
         PlayerPrefs.DeleteKey(PrefsHasCachedMoneyKey);
         PlayerPrefs.DeleteKey(PrefsResumeAfterUpgradeKey);

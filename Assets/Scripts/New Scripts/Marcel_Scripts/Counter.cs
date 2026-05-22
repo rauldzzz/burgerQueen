@@ -113,6 +113,11 @@ public class Counter : MonoBehaviour
         {
             if (playerInside == null && !waitingForPlayerToLeave)
             {
+                if (!foundPlayer.TryClaimCounter(this))
+                {
+                    return;
+                }
+
                 playerInside = foundPlayer;
                 timer = 0f;
                 currentTimerUI = playerInside.GetComponentInParent<CounterTimerUI>();
@@ -147,9 +152,17 @@ public class Counter : MonoBehaviour
                 {
                     playerInside.sourceCounter = null;
                 }
+                if (playerInside != null)
+                {
+                    playerInside.ReleaseCounter(this);
+                }
                 if (lastPlayer != null && lastPlayer.sourceCounter == this)
                 {
                     lastPlayer.sourceCounter = null;
+                }
+                if (lastPlayer != null)
+                {
+                    lastPlayer.ReleaseCounter(this);
                 }
                 playerInside = null;
                 playerWhoPlacedItem = null;

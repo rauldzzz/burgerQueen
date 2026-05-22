@@ -69,7 +69,7 @@ public class UpgradeShopManager : MonoBehaviour
         if (moneyText == null) return;
 
         if (GameManager.Instance != null)
-            moneyText.text = "$" + GameManager.Instance.totalMoney;
+            moneyText.text = "$" + GameManager.Instance.currentMoney;
         else if (ScoreManager.Instance != null)
             moneyText.text = "$" + ScoreManager.Instance.GetMoney();
         else if (GameManager.hasCachedMoney)
@@ -105,8 +105,8 @@ public class UpgradeShopManager : MonoBehaviour
         // If we have a GameManager, use it directly
         if (GameManager.Instance != null)
         {
-            Debug.Log($"UpgradeShopManager: Total selected upgrades cost = ${selectedTotal} (player has ${GameManager.Instance.totalMoney}).");
-            if (selectedTotal > GameManager.Instance.totalMoney)
+            Debug.Log($"UpgradeShopManager: Total selected upgrades cost = ${selectedTotal} (player has ${GameManager.Instance.currentMoney}).");
+            if (selectedTotal > GameManager.Instance.currentMoney)
             {
                 Debug.LogWarning("UpgradeShopManager: Not enough money to apply selected upgrades.");
                 return;
@@ -136,9 +136,10 @@ public class UpgradeShopManager : MonoBehaviour
             }
 
             GameManager.Instance.SpendMoney(selectedTotal);
-            Debug.Log($"UpgradeShopManager: Spending ${selectedTotal}. Remaining money=${GameManager.Instance.totalMoney}.");
+            Debug.Log($"UpgradeShopManager: Spending ${selectedTotal}. Remaining money=${GameManager.Instance.currentMoney}.");
             UpdateMoneyText();
             ResetSelections();
+            Debug.Log($"UpgradeShopManager: BEFORE loading gameplay - GameManager.currentMoney={GameManager.Instance.currentMoney}, GameManager.totalMoney={GameManager.Instance.totalMoney}, currentRound={GameManager.Instance.currentRound}");
             GameManager.Instance.StartRound();
             Debug.Log($"UpgradeShopManager: Loading gameplay scene {GameManager.Instance.gameplaySceneName} after upgrades.");
             SceneManager.LoadScene(GameManager.Instance.gameplaySceneName);
@@ -192,6 +193,8 @@ public class UpgradeShopManager : MonoBehaviour
             UpdateMoneyText();
             ResetSelections();
 
+            Debug.Log($"UpgradeShopManager: BEFORE loading gameplay (fallback) - cachedMoney={GameManager.cachedMoney}, hasCachedMoney={GameManager.hasCachedMoney}");
+
             GameManager.resumeAfterUpgrade = true;
             if (!GameManager.hasCachedMoney)
                 GameManager.hasCachedMoney = true;
@@ -218,7 +221,7 @@ public class UpgradeShopManager : MonoBehaviour
     {
         int available = 0;
         if (GameManager.Instance != null)
-            available = GameManager.Instance.totalMoney;
+            available = GameManager.Instance.currentMoney;
         else if (ScoreManager.Instance != null)
             available = ScoreManager.Instance.GetMoney();
         else if (GameManager.hasCachedMoney)

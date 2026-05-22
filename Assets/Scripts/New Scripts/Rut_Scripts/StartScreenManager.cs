@@ -5,8 +5,10 @@ public class StartScreenManager : MonoBehaviour
 {
     public PlayerSpot player1Spot;
     public PlayerSpot player2Spot;
+    public float startDelaySeconds = 2f;
 
     private bool gameStarted = false;
+    private float readyTimer = 0f;
 
     void Start()
     {
@@ -19,14 +21,27 @@ public class StartScreenManager : MonoBehaviour
 
     void Update()
     {
-        if (!gameStarted &&
+        if (gameStarted)
+            return;
+
+        bool bothReady =
             player1Spot != null &&
             player2Spot != null &&
             player1Spot.occupied &&
-            player2Spot.occupied)
+            player2Spot.occupied;
+
+        if (bothReady)
         {
-            gameStarted = true;
-            StartGame();
+            readyTimer += Time.deltaTime;
+            if (readyTimer >= startDelaySeconds)
+            {
+                gameStarted = true;
+                StartGame();
+            }
+        }
+        else
+        {
+            readyTimer = 0f;
         }
     }
 

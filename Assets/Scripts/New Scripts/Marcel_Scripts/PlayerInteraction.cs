@@ -6,6 +6,7 @@ public class PlayerInteraction : MonoBehaviour
     public GameObject heldItem = null;
     public string heldItemName = null;
     public Counter sourceCounter = null;
+    public Counter activeCounter = null;
 
     private Animator handAnimator;
 
@@ -15,6 +16,28 @@ public class PlayerInteraction : MonoBehaviour
     }
 
     public bool IsHoldingItem() => heldItem != null;
+
+    public bool CanInteractWithCounter(Counter counter)
+    {
+        return activeCounter == null || activeCounter == counter;
+    }
+
+    public bool TryClaimCounter(Counter counter)
+    {
+        if (counter == null) return false;
+        if (activeCounter != null && activeCounter != counter) return false;
+
+        activeCounter = counter;
+        return true;
+    }
+
+    public void ReleaseCounter(Counter counter)
+    {
+        if (activeCounter == counter)
+        {
+            activeCounter = null;
+        }
+    }
 
     public void PickUp(GameObject item, string itemName, Counter source = null)
     {

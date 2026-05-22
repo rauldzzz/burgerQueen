@@ -2571,6 +2571,7 @@ MonoBehaviour:
   heldItem: {fileID: 0}
   heldItemName: 
   sourceCounter: {fileID: 0}
+  activeCounter: {fileID: 0}
 --- !u!114 &228490729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5441,6 +5442,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ac57d8928d0de7d40af67c7c4bd85600, type: 3}
       insertIndex: -1
       addedObject: {fileID: 466281875}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ac57d8928d0de7d40af67c7c4bd85600, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 466281878}
   m_SourcePrefab: {fileID: 100100000, guid: ac57d8928d0de7d40af67c7c4bd85600, type: 3}
 --- !u!4 &466281873 stripped
 Transform:
@@ -5473,6 +5477,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.0000005, y: 25, z: 2.0419035}
   m_Center: {x: -0.00000010058284, y: 0.49999994, z: 0.020951515}
+--- !u!114 &466281878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 466281874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d86f71951df1444189fe55662dd5e54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Counter
+  interactDelay: 1
 --- !u!1 &479569041
 GameObject:
   m_ObjectHideFlags: 0
@@ -17091,7 +17108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0643314355eb9b3449662450b5c4d130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Timer
-  timeRemaining: 300
+  timeRemaining: 120
   timerText: {fileID: 1655149788}
 --- !u!114 &1655149788
 MonoBehaviour:
@@ -20699,6 +20716,7 @@ MonoBehaviour:
   heldItem: {fileID: 0}
   heldItemName: 
   sourceCounter: {fileID: 0}
+  activeCounter: {fileID: 0}
 --- !u!114 &1990416287
 MonoBehaviour:
   m_ObjectHideFlags: 0
