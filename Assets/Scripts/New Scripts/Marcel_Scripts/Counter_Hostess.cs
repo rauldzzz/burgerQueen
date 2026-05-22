@@ -26,12 +26,46 @@ public class Counter_Hostess : Counter
         }
     }
 
+    protected override bool WillInteract(PlayerInteraction player)
+    {
+        if (player == null) return false;
+
+        if (!player.IsHoldingItem() && HasItem())
+        {
+            BurgerAssemblyRecipe recipe = GetRecipeForCurrentOrder() ?? defaultRecipe;
+            return recipe != null && IsFinalBurgerState(recipe, itemNameOnCounter);
+        }
+
+        if (player.IsHoldingItem() && !HasItem())
+        {
+            return TryFindStartingRecipe(player.heldItemName) != null;
+        }
+
+        if (player.IsHoldingItem() && HasItem())
+        {
+            return FindMatchingStep(itemNameOnCounter, player.heldItemName) != null;
+        }
+
+        return false;
+    }
+
+    private BurgerAssemblyRecipe TryFindStartingRecipe(string heldItemName)
+    {
+        BurgerAssemblyRecipe recipe = GetRecipeForCurrentOrder() ?? (defaultRecipe != null ? defaultRecipe : FindFirstRecipeWithStartingState());
+        if (recipe == null) return null;
+
+        GameObject startingPrefab = recipe.startingStatePrefab;
+        if (startingPrefab != null && Counter.NormalizeItemName(startingPrefab.name) == Counter.NormalizeItemName(heldItemName))
+        {
+            return recipe;
+        }
+
+        return null;
+    }
+
     protected override void HandleInteraction(PlayerInteraction player)
     {
-        if (player == null)
-        {
-            return;
-        }
+        if (player == null) return;
 
         if (!player.IsHoldingItem())
         {
@@ -46,7 +80,7 @@ public class Counter_Hostess : Counter
                 GameObject item = TakeItem();
                 if (item != null)
                 {
-                    player.PickUp(item, item.name);
+                    player.PickUp(item, item.name, this);
                 }
             }
 
@@ -94,6 +128,7 @@ public class Counter_Hostess : Counter
         item.transform.SetParent(transform);
         item.transform.localPosition = localPosition;
         item.transform.localScale = Vector3.one * itemScale;
+        if (playerInside != null) playerWhoPlacedItem = playerInside;
     }
 
     private bool TryPlaceStartingState(PlayerInteraction player)
