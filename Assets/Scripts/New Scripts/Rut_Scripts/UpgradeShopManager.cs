@@ -8,6 +8,8 @@ public class UpgradeShopManager : MonoBehaviour
     public TextMeshProUGUI moneyText;
     public Renderer continueRenderer;
     public Color continueReadyColor = Color.green;
+    public string[] continueTriggerTags = new string[] { "Player" };
+    public bool acceptAnyContinueCollider = false;
 
     private float continueHoldTime = 0f;
     private bool continuePlayerInside = false;
@@ -26,8 +28,22 @@ public class UpgradeShopManager : MonoBehaviour
         if (continueRenderer != null)
             continueOriginalColor = continueRenderer.material.color;
 
+        if (moneyText == null)
+            Debug.LogError("UpgradeShopManager: moneyText is not assigned in the inspector.");
+
+        if (GameManager.Instance == null && ScoreManager.Instance == null)
+            Debug.LogWarning("UpgradeShopManager: No money source found in scene. Upgrade shop will show $0.");
+
         UpdateMoneyText();
-        Debug.Log($"UpgradeShopManager: Starting with player money=${GameManager.Instance?.totalMoney}");
+        LogSceneMoneyState();
+    }
+
+    private void LogSceneMoneyState()
+    {
+        string sceneName = SceneManager.GetActiveScene().name;
+        string gmState = GameManager.Instance != null ? "present" : "missing";
+        string scoreState = ScoreManager.Instance != null ? "present" : "missing";
+        Debug.Log($"UpgradeShopManager: Scene={sceneName}, moneyTextAssigned={(moneyText != null)}, GameManager={gmState}, ScoreManager={scoreState}");
     }
 
     private void Update()
@@ -56,6 +72,8 @@ public class UpgradeShopManager : MonoBehaviour
             moneyText.text = "$" + GameManager.Instance.totalMoney;
         else if (ScoreManager.Instance != null)
             moneyText.text = "$" + ScoreManager.Instance.GetMoney();
+        else if (GameManager.hasCachedMoney)
+            moneyText.text = "$" + GameManager.cachedMoney;
         else
             moneyText.text = "$0";
     }
@@ -122,6 +140,8 @@ public class UpgradeShopManager : MonoBehaviour
             UpdateMoneyText();
             ResetSelections();
             GameManager.Instance.StartRound();
+            Debug.Log($"UpgradeShopManager: Loading gameplay scene {GameManager.Instance.gameplaySceneName} after upgrades.");
+            SceneManager.LoadScene(GameManager.Instance.gameplaySceneName);
         }
         else
         {
@@ -159,15 +179,28 @@ public class UpgradeShopManager : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("UpgradeShopManager: ScoreManager not present; could not deduct funds now.");
+                if (!GameManager.hasCachedMoney)
+                    GameManager.hasCachedMoney = true;
+
+                GameManager.cachedMoney -= selectedTotal;
+                if (GameManager.cachedMoney < 0)
+                    GameManager.cachedMoney = 0;
+                Debug.Log($"UpgradeShopManager: Deducted ${selectedTotal} from cached money (now ${GameManager.cachedMoney}).");
+                GameManager.SaveCachedMoney();
             }
 
             UpdateMoneyText();
             ResetSelections();
 
+            GameManager.resumeAfterUpgrade = true;
+            if (!GameManager.hasCachedMoney)
+                GameManager.hasCachedMoney = true;
+            GameManager.SaveCachedMoney();
+            GameManager.SaveResumeAfterUpgrade();
+
             // Load gameplay scene so that GameManager (if part of that scene) can wake up and apply the cached upgrades
-            Debug.Log("UpgradeShopManager: Loading gameplay scene 'RaulScene' to continue.");
-            SceneManager.LoadScene("RaulScene");
+            Debug.Log("UpgradeShopManager: Loading gameplay scene 'CanvisProbes' to continue (fallback without GameManager). ");
+            SceneManager.LoadScene("CanvisProbes");
         }
     }
 
@@ -188,6 +221,8 @@ public class UpgradeShopManager : MonoBehaviour
             available = GameManager.Instance.totalMoney;
         else if (ScoreManager.Instance != null)
             available = ScoreManager.Instance.GetMoney();
+        else if (GameManager.hasCachedMoney)
+            available = GameManager.cachedMoney;
         else
             available = 0;
 
@@ -206,23 +241,66 @@ public class UpgradeShopManager : MonoBehaviour
         return true;
     }
 
+    private bool IsContinueCollider(Collider other)
+    {
+        if (acceptAnyContinueCollider)
+            return true;
+
+        if (continueTriggerTags == null || continueTriggerTags.Length == 0)
+            return other.CompareTag("Player");
+
+        foreach (string tag in continueTriggerTags)
+        {
+            if (other.CompareTag(tag))
+                return true;
+        }
+
+        return false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player"))
+        if (!IsContinueCollider(other))
             return;
 
         continuePlayerInside = true;
         continueHoldTime = 0f;
-        Debug.Log("UpgradeShopManager: Player entered Continue zone.");
+        Debug.Log($"UpgradeShopManager: Player entered Continue zone with tag '{other.tag}'.");
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!other.CompareTag("Player"))
+        if (!IsContinueCollider(other))
             return;
 
         continuePlayerInside = false;
         continueHoldTime = 0f;
-        Debug.Log("UpgradeShopManager: Player exited Continue zone.");
+        Debug.Log($"UpgradeShopManager: Player exited Continue zone with tag '{other.tag}'.");
+    }
+
+    private void OnMouseDown()
+    {
+        Debug.Log("UpgradeShopManager: OnMouseDown on continue object.");
+        ContinueShop();
+    }
+
+    public void ContinueShop()
+    {
+        if (continueTriggered)
+        {
+            Debug.Log("UpgradeShopManager: Continue already triggered, ignoring additional request.");
+            return;
+        }
+
+        if (!continuePlayerInside)
+        {
+            Debug.LogWarning("UpgradeShopManager: Continue requested but player is not inside continue zone.");
+            return;
+        }
+
+        continueTriggered = true;
+        Debug.Log("UpgradeShopManager: ContinueShop invoked manually.");
+        ApplySelectedUpgrades();
     }
 }
+

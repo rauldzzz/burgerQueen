@@ -37,10 +37,12 @@ public class StartScreenManager : MonoBehaviour
         if (GameManager.Instance != null)
         {
             GameManager.Instance.StartRound();
+            Debug.Log($"StartScreenManager: Loading gameplay scene {GameManager.Instance.gameplaySceneName}.");
+            SceneManager.LoadScene(GameManager.Instance.gameplaySceneName);
         }
         else
         {
-            SceneManager.LoadScene("RaulScene");
+            SceneManager.LoadScene("CanvisProbes");
         }
     }
 }

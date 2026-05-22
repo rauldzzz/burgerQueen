@@ -44,6 +44,8 @@ public class Timer : MonoBehaviour
         {
             int gained = ScoreManager.Instance.GetMoney();
             GameManager.Instance.totalMoney += gained;
+            GameManager.cachedMoney = GameManager.Instance.totalMoney;
+            GameManager.hasCachedMoney = true;
             Debug.Log($"Timer: Round ended. Added ${gained} to total money (now ${GameManager.Instance.totalMoney}).");
 
             if (GameManager.Instance.currentRound >= GameManager.Instance.totalRounds)

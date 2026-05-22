@@ -5,10 +5,17 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public static int cachedMoney = 0;
+    public static bool hasCachedMoney = false;
+    public static bool resumeAfterUpgrade = false;
+
+    private const string PrefsTotalMoneyKey = "BQ_TotalMoney";
+    private const string PrefsHasCachedMoneyKey = "BQ_HasCachedMoney";
+    private const string PrefsResumeAfterUpgradeKey = "BQ_ResumeAfterUpgrade";
 
     [Header("Scenes")]
     public string initialSceneName = "Inici";
-    public string gameplaySceneName = "RaulScene";
+    public string gameplaySceneName = "CanvisProbes";
     public string upgradeSceneName = "UpgradeShop";
 
     [Header("Rounds")]
@@ -41,12 +48,42 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            Debug.Log("GameManager: instance created.");
+            DontDestroyOnLoad(gameObject);
+            Debug.Log("GameManager: instance created and marked DontDestroyOnLoad.");
+
+            if (!hasCachedMoney && PlayerPrefs.HasKey(PrefsHasCachedMoneyKey))
+            {
+                hasCachedMoney = PlayerPrefs.GetInt(PrefsHasCachedMoneyKey, 0) == 1;
+                cachedMoney = PlayerPrefs.GetInt(PrefsTotalMoneyKey, 0);
+                Debug.Log($"GameManager: Loaded cached money from PlayerPrefs=${cachedMoney}, hasCachedMoney={hasCachedMoney}.");
+            }
+
+            if (hasCachedMoney)
+            {
+                totalMoney = cachedMoney;
+                Debug.Log($"GameManager: Restored cached money=${cachedMoney} on Awake.");
+            }
+
+            if (PlayerPrefs.GetInt(PrefsResumeAfterUpgradeKey, 0) == 1)
+            {
+                resumeAfterUpgrade = true;
+                PlayerPrefs.SetInt(PrefsResumeAfterUpgradeKey, 0);
+                PlayerPrefs.Save();
+                Debug.Log("GameManager: Loaded resumeAfterUpgrade from PlayerPrefs.");
+            }
+
             // If upgrades were purchased while GameManager wasn't present, apply them now
             if (UpgradeCache.HasPending())
             {
                 Debug.Log("GameManager: Found pending upgrades in UpgradeCache, applying now.");
                 UpgradeCache.ApplyTo(this);
+            }
+
+            if (resumeAfterUpgrade)
+            {
+                resumeAfterUpgrade = false;
+                Debug.Log("GameManager: Resuming next round after upgrade shop.");
+                StartRound();
             }
         }
         else
@@ -60,6 +97,10 @@ public class GameManager : MonoBehaviour
     {
         currentRound = 0;
         totalMoney = 0;
+        cachedMoney = 0;
+        hasCachedMoney = false;
+        resumeAfterUpgrade = false;
+        ClearCachedMoney();
         unlockCheeseBurger = false;
         betterPan = false;
         extraCuttingZone = false;
@@ -77,6 +118,9 @@ public class GameManager : MonoBehaviour
         totalMoney -= amount;
         if (totalMoney < 0)
             totalMoney = 0;
+        cachedMoney = totalMoney;
+        hasCachedMoney = true;
+        SaveCachedMoney();
     }
 
     public void StartRound()
@@ -99,6 +143,30 @@ public class GameManager : MonoBehaviour
         ResetGame();
         Debug.Log("GameManager: Ending session and returning to initial scene.");
         SceneManager.LoadScene(initialSceneName);
+    }
+
+    public static void SaveCachedMoney()
+    {
+        PlayerPrefs.SetInt(PrefsTotalMoneyKey, cachedMoney);
+        PlayerPrefs.SetInt(PrefsHasCachedMoneyKey, hasCachedMoney ? 1 : 0);
+        PlayerPrefs.Save();
+        Debug.Log($"GameManager: Saved cached money=${cachedMoney} to PlayerPrefs.");
+    }
+
+    public static void SaveResumeAfterUpgrade()
+    {
+        PlayerPrefs.SetInt(PrefsResumeAfterUpgradeKey, resumeAfterUpgrade ? 1 : 0);
+        PlayerPrefs.Save();
+        Debug.Log($"GameManager: Saved resumeAfterUpgrade={resumeAfterUpgrade} to PlayerPrefs.");
+    }
+
+    public static void ClearCachedMoney()
+    {
+        PlayerPrefs.DeleteKey(PrefsTotalMoneyKey);
+        PlayerPrefs.DeleteKey(PrefsHasCachedMoneyKey);
+        PlayerPrefs.DeleteKey(PrefsResumeAfterUpgradeKey);
+        PlayerPrefs.Save();
+        Debug.Log("GameManager: Cleared cached money PlayerPrefs.");
     }
 
     private void ApplyGameplayUpgrades()

@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Inici.unity
     guid: 9a9548ddcdbccaf4885fcbbc493c3926
   - enabled: 1
+    path: Assets/Scenes/CanvisProbes.unity
+    guid: 6f372cff2ab381f4c974739672eeca45
+  - enabled: 0
     path: Assets/Scenes/RaulScene.unity
     guid: f6d6ccd1f4547884fa3f29bdd85eb5f5
   - enabled: 1
