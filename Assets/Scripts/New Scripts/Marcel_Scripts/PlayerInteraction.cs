@@ -5,6 +5,7 @@ public class PlayerInteraction : MonoBehaviour
 {
     public GameObject heldItem = null;
     public string heldItemName = null;
+    public Counter sourceCounter = null;
 
     private Animator handAnimator;
 
@@ -15,12 +16,13 @@ public class PlayerInteraction : MonoBehaviour
 
     public bool IsHoldingItem() => heldItem != null;
 
-    public void PickUp(GameObject item, string itemName)
+    public void PickUp(GameObject item, string itemName, Counter source = null)
     {
-        StartCoroutine(PickUpRoutine(item, itemName));
+        if (IsHoldingItem()) return;
+        StartCoroutine(PickUpRoutine(item, itemName, source));
     }
 
-    private IEnumerator PickUpRoutine(GameObject item, string itemName)
+    private IEnumerator PickUpRoutine(GameObject item, string itemName, Counter source)
     {
         // Play grab animation first
         if (handAnimator != null)
@@ -32,6 +34,7 @@ public class PlayerInteraction : MonoBehaviour
         // Then give the item
         heldItem = item;
         heldItemName = Counter.NormalizeItemName(itemName);
+        sourceCounter = source;
         item.transform.SetParent(transform);
         item.transform.localPosition = new Vector3(0, 13f, 3f);
     }
@@ -56,6 +59,7 @@ public class PlayerInteraction : MonoBehaviour
         dropped.transform.SetParent(null);
         heldItem = null;
         heldItemName = null;
+        sourceCounter = null;
 
         if (handAnimator != null)
             handAnimator.SetTrigger("Release");
