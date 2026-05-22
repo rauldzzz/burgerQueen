@@ -34,7 +34,7 @@ public class Counter_Processor : Counter
 
         if (match != null)
         {
-            GameObject inputItem = player.Drop();
+            GameObject inputItem = player.Drop(false);
             if (inputItem != null)
             {
                 Destroy(inputItem);
@@ -42,7 +42,16 @@ public class Counter_Processor : Counter
 
             GameObject output = Instantiate(match.outputPrefab);
             output.transform.localScale = match.outputScale;
-            player.PickUp(output, match.outputPrefab.name, this);
+            player.PickUp(output, match.outputPrefab.name, this, false);
+
+            if (SoundManager.Instance != null)
+            {
+                if (this is Counter_Cutting)
+                    SoundManager.Instance.PlayCutClip();
+                else if (this is Counter_Grill)
+                    SoundManager.Instance.PlayGrillClip();
+            }
+
             Debug.Log($"Counter_Processor: Processed {match.inputPrefab.name} into {match.outputPrefab.name} for player {player.name} on {gameObject.name}.");
         }
         else

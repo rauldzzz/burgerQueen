@@ -39,13 +39,13 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
-    public void PickUp(GameObject item, string itemName, Counter source = null)
+    public void PickUp(GameObject item, string itemName, Counter source = null, bool playSfx = true)
     {
         if (IsHoldingItem()) return;
-        StartCoroutine(PickUpRoutine(item, itemName, source));
+        StartCoroutine(PickUpRoutine(item, itemName, source, playSfx));
     }
 
-    private IEnumerator PickUpRoutine(GameObject item, string itemName, Counter source)
+    private IEnumerator PickUpRoutine(GameObject item, string itemName, Counter source, bool playSfx)
     {
         // Play grab animation first
         if (handAnimator != null)
@@ -60,6 +60,9 @@ public class PlayerInteraction : MonoBehaviour
         sourceCounter = source;
         item.transform.SetParent(transform);
         item.transform.localPosition = new Vector3(0, 13f, 3f);
+
+        if (playSfx && SoundManager.Instance != null)
+            SoundManager.Instance.PlayPickUpClip();
     }
 
     private float GetAnimationLength(string clipName)
@@ -74,7 +77,7 @@ public class PlayerInteraction : MonoBehaviour
         return 0.3f; // fallback
     }
 
-    public GameObject Drop()
+    public GameObject Drop(bool playSfx = true)
     {
         if (heldItem == null) return null;
 
@@ -83,6 +86,9 @@ public class PlayerInteraction : MonoBehaviour
         heldItem = null;
         heldItemName = null;
         sourceCounter = null;
+
+        if (playSfx && SoundManager.Instance != null)
+            SoundManager.Instance.PlayDropClip();
 
         if (handAnimator != null)
             handAnimator.SetTrigger("Release");

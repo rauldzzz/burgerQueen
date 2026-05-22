@@ -14,14 +14,19 @@ public class Counter_Delivery : Counter
         if (success)
         {
             Debug.Log("Order delivered successfully!");
+            if (SoundManager.Instance != null)
+            {
+                Debug.Log("Counter_Delivery: Playing deliver SFX.");
+                SoundManager.Instance.PlayDeliverClip();
+            }
             Destroy(player.heldItem);
-            player.Drop();
+            player.Drop(false);
         }
         else
         {
             Debug.Log("Wrong order! Dish discarded.");
             Destroy(player.heldItem);
-            player.Drop();
+            player.Drop(false);
         }
     }
 }

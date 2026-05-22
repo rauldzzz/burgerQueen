@@ -41,6 +41,13 @@ public class WallWindowOpen : MonoBehaviour
         {
             Debug.Log("WallWindowOpen: Burger matches! Completing order '" + current.burgerName + "'.");
             ordersManager.CompleteOrder(current.burgerName);
+
+            if (SoundManager.Instance != null)
+            {
+                Debug.Log("WallWindowOpen: Playing deliver SFX.");
+                SoundManager.Instance.PlayDeliverClip();
+            }
+
             Destroy(otherObj);  // Destroy the delivered burger
             Debug.Log("WallWindowOpen: Order completed. Burger destroyed. New order ready.");
         }
@@ -101,7 +108,7 @@ public class WallWindowOpen : MonoBehaviour
                 if (player != null)
                 {
                     HandleCollision(candidate);
-                    player.Drop();  // Drop automatically after delivery
+                    player.Drop(false);  // Drop automatically after delivery (silent)
                 }
                 break;
             }
