@@ -10014,7 +10014,11 @@ MonoBehaviour:
   extraCuttingZone: 0
   extraServingZone: 0
   grillSpeedMultiplier: 0.75
-  cheeseBurgerRecipe: {fileID: 11400000, guid: 53e2342d031ef464db3f7303c1f44f01, type: 2}
+  newRecipes:
+  - {fileID: 11400000, guid: 69529f954e20daa44a34f080e3a427fb, type: 2}
+  - {fileID: 11400000, guid: a431bb92b4562f643b5caa8613fa03aa, type: 2}
+  - {fileID: 11400000, guid: 39a488945102a3b4aa4ba04b81ef8a86, type: 2}
+  - {fileID: 11400000, guid: db0c50c1abbae9444935e814ba3a1014, type: 2}
   oldCounterToCuttingZone: {fileID: 466281874}
   extraCuttingZoneObject: {fileID: 1688518716}
   oldCounterToServingZone: {fileID: 1195386168}
@@ -12754,7 +12758,6 @@ MonoBehaviour:
   possibleOrders:
   - {fileID: 11400000, guid: b3fb7e60ad712184594907d1c5bc18b2, type: 2}
   - {fileID: 11400000, guid: a431bb92b4562f643b5caa8613fa03aa, type: 2}
-  - {fileID: 11400000, guid: 53e2342d031ef464db3f7303c1f44f01, type: 2}
   orderText: {fileID: 1556343290}
   finalBurgerDisplay: {fileID: 1414924403}
   ingredientsContainer: {fileID: 827380873}

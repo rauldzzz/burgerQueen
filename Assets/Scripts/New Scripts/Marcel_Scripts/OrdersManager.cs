@@ -3,6 +3,7 @@ using UnityEngine.UI; // �Importante a�adir esto para usar Image!
 using System.Collections.Generic;
 using TMPro;
 using System;
+using System.Reflection;
 
 public class OrdersManager : MonoBehaviour
 {
@@ -32,12 +33,53 @@ public class OrdersManager : MonoBehaviour
         if (GameManager.Instance == null)
             return;
 
-        if (GameManager.Instance.unlockCheeseBurger && GameManager.Instance.cheeseBurgerRecipe != null)
+        if (GameManager.Instance.unlockCheeseBurger)
         {
-            if (!possibleOrders.Contains(GameManager.Instance.cheeseBurgerRecipe))
-                possibleOrders.Add(GameManager.Instance.cheeseBurgerRecipe);
-            Debug.Log("OrdersManager: Applied game upgrades - cheese burger unlocked.");
+            List<BurgerRecipe> unlockedRecipes = GetUnlockedRecipesFromGameManager(GameManager.Instance);
+            if (unlockedRecipes == null)
+                return;
+
+            int added = 0;
+            foreach (BurgerRecipe r in unlockedRecipes)
+            {
+                if (r == null) continue;
+                if (!possibleOrders.Contains(r))
+                {
+                    possibleOrders.Add(r);
+                    added++;
+                }
+            }
+
+            Debug.Log($"OrdersManager: Applied game upgrades - added {added} unlocked recipes.");
         }
+    }
+
+    private List<BurgerRecipe> GetUnlockedRecipesFromGameManager(GameManager gameManager)
+    {
+        if (gameManager == null)
+            return null;
+
+        Type gameManagerType = gameManager.GetType();
+
+        PropertyInfo recipesProperty = gameManagerType.GetProperty("newRecipes", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        if (recipesProperty != null && typeof(List<BurgerRecipe>).IsAssignableFrom(recipesProperty.PropertyType))
+        {
+            return recipesProperty.GetValue(gameManager) as List<BurgerRecipe>;
+        }
+
+        FieldInfo recipesField = gameManagerType.GetField("newRecipes", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        if (recipesField != null && typeof(List<BurgerRecipe>).IsAssignableFrom(recipesField.FieldType))
+        {
+            return recipesField.GetValue(gameManager) as List<BurgerRecipe>;
+        }
+
+        MethodInfo recipesMethod = gameManagerType.GetMethod("GetUnlockedRecipes", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        if (recipesMethod != null && typeof(List<BurgerRecipe>).IsAssignableFrom(recipesMethod.ReturnType))
+        {
+            return recipesMethod.Invoke(gameManager, null) as List<BurgerRecipe>;
+        }
+
+        return null;
     }
 
     public void GenerateNewOrder()
@@ -62,13 +104,13 @@ public class OrdersManager : MonoBehaviour
         if (submittedBurgerName == currentOrder.burgerName)
         {
             Debug.Log("OrdersManager: Order completed! +" + currentOrder.reward + " points.");
-            
+
             ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
             if (scoreManager != null)
                 scoreManager.AddMoney(currentOrder.reward);
             else
                 Debug.LogWarning("OrdersManager: ScoreManager not found in scene!");
-            
+
             GenerateNewOrder();
             return true;
         }

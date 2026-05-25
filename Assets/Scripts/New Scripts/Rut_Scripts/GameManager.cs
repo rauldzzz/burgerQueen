@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviour
     private const string PrefsTotalMoneyKey = "BQ_TotalMoney";
     private const string PrefsHasCachedMoneyKey = "BQ_HasCachedMoney";
     private const string PrefsResumeAfterUpgradeKey = "BQ_ResumeAfterUpgrade";
+    private const string PrefsUnlockCheeseBurgerKey = "BQ_UnlockCheeseBurger";
+    private const string PrefsBetterPanKey = "BQ_BetterPan";
+    private const string PrefsExtraCuttingZoneKey = "BQ_ExtraCuttingZone";
+    private const string PrefsExtraServingZoneKey = "BQ_ExtraServingZone";
 
     [Header("Scenes")]
     public string initialSceneName = "Inici";
@@ -38,15 +42,14 @@ public class GameManager : MonoBehaviour
     public float grillSpeedMultiplier = 0.75f;
 
     [Header("Upgrade References")]
-    public BurgerRecipe cheeseBurgerRecipe;
+    [Tooltip("List of recipes unlocked by the NewRecipe upgrade (assign in inspector)")]
+    public List<BurgerRecipe> newRecipes;
 
     public GameObject oldCounterToCuttingZone;
     public GameObject extraCuttingZoneObject;
 
     public GameObject oldCounterToServingZone;
-    public GameObject extraServingZoneObject;    
-
-    private bool applyGameplayUpgradesOnNextGameplayLoad = false;
+    public GameObject extraServingZoneObject;
 
     private void Awake()
     {
@@ -54,7 +57,7 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneLoaded += HandleSceneLoaded;
             Debug.Log("GameManager: instance created and marked DontDestroyOnLoad.");
 
             if (persistMoney)
@@ -81,6 +84,8 @@ public class GameManager : MonoBehaviour
                 Debug.Log("GameManager: Loaded resumeAfterUpgrade from PlayerPrefs.");
             }
 
+            LoadGameplayUpgrades();
+
             // If upgrades were purchased while GameManager wasn't present, apply them now
             if (UpgradeCache.HasPending())
             {
@@ -94,6 +99,8 @@ public class GameManager : MonoBehaviour
                 Debug.Log("GameManager: Resuming next round after upgrade shop.");
                 StartRound();
             }
+
+            ApplyGameplayUpgradesIfNeeded(SceneManager.GetActiveScene());
             Debug.Log($"GameManager: Awake finished -> totalMoney={totalMoney}, currentMoney={currentMoney}, cachedMoney={cachedMoney}, hasCachedMoney={hasCachedMoney}, currentRound={currentRound}");
         }
         else
@@ -106,7 +113,9 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         if (Instance == this)
-            SceneManager.sceneLoaded -= OnSceneLoaded;
+        {
+            SceneManager.sceneLoaded -= HandleSceneLoaded;
+        }
     }
 
     public void ResetGame()
@@ -122,6 +131,7 @@ public class GameManager : MonoBehaviour
         betterPan = false;
         extraCuttingZone = false;
         extraServingZone = false;
+        ClearSavedUpgrades();
         Debug.Log("GameManager: Reset game state to defaults.");
     }
 
@@ -161,11 +171,7 @@ public class GameManager : MonoBehaviour
 
         currentRound++;
 
-        applyGameplayUpgradesOnNextGameplayLoad = true;
-
-        Debug.Log($"GameManager: Round {currentRound}/{totalRounds} | unlockCheeseBurger={unlockCheeseBurger}, betterPan={betterPan}, extraCuttingZone={extraCuttingZone}, extraServingZone={extraServingZone}");
-
-        // Upgrades are applied after the gameplay scene has finished loading, when its objects exist.
+        Debug.Log($"ROUND START - Round {currentRound}/{totalRounds}");
     }
 
     public void EndSession()
@@ -210,10 +216,59 @@ public class GameManager : MonoBehaviour
         Debug.Log("GameManager: Cleared cached money PlayerPrefs.");
     }
 
+    public void SaveGameplayUpgrades()
+    {
+        PlayerPrefs.SetInt(PrefsUnlockCheeseBurgerKey, unlockCheeseBurger ? 1 : 0);
+        PlayerPrefs.SetInt(PrefsBetterPanKey, betterPan ? 1 : 0);
+        PlayerPrefs.SetInt(PrefsExtraCuttingZoneKey, extraCuttingZone ? 1 : 0);
+        PlayerPrefs.SetInt(PrefsExtraServingZoneKey, extraServingZone ? 1 : 0);
+        PlayerPrefs.Save();
+        Debug.Log($"GameManager: Saved gameplay upgrades -> cheese={unlockCheeseBurger}, pan={betterPan}, cutting={extraCuttingZone}, serving={extraServingZone}.");
+    }
+
+    private void LoadGameplayUpgrades()
+    {
+        unlockCheeseBurger = PlayerPrefs.GetInt(PrefsUnlockCheeseBurgerKey, unlockCheeseBurger ? 1 : 0) == 1;
+        betterPan = PlayerPrefs.GetInt(PrefsBetterPanKey, betterPan ? 1 : 0) == 1;
+        extraCuttingZone = PlayerPrefs.GetInt(PrefsExtraCuttingZoneKey, extraCuttingZone ? 1 : 0) == 1;
+        extraServingZone = PlayerPrefs.GetInt(PrefsExtraServingZoneKey, extraServingZone ? 1 : 0) == 1;
+        Debug.Log($"GameManager: Loaded gameplay upgrades -> cheese={unlockCheeseBurger}, pan={betterPan}, cutting={extraCuttingZone}, serving={extraServingZone}.");
+    }
+
+    public bool IsUpgradePurchased(UpgradeButton.UpgradeType upgradeType)
+    {
+        switch (upgradeType)
+        {
+            case UpgradeButton.UpgradeType.NewRecipe:
+                return unlockCheeseBurger;
+            case UpgradeButton.UpgradeType.BetterPan:
+                return betterPan;
+            case UpgradeButton.UpgradeType.ExtraCuttingZone:
+                return extraCuttingZone;
+            case UpgradeButton.UpgradeType.ExtraServingZone:
+                return extraServingZone;
+            default:
+                return false;
+        }
+    }
+
+    public List<BurgerRecipe> GetUnlockedRecipes()
+    {
+        return newRecipes;
+    }
+
+    private void ClearSavedUpgrades()
+    {
+        PlayerPrefs.DeleteKey(PrefsUnlockCheeseBurgerKey);
+        PlayerPrefs.DeleteKey(PrefsBetterPanKey);
+        PlayerPrefs.DeleteKey(PrefsExtraCuttingZoneKey);
+        PlayerPrefs.DeleteKey(PrefsExtraServingZoneKey);
+        PlayerPrefs.Save();
+        Debug.Log("GameManager: Cleared saved gameplay upgrades.");
+    }
+
     private void ApplyGameplayUpgrades()
     {
-        RefreshGameplayReferences();
-
         foreach (Counter_Grill grill in FindObjectsByType<Counter_Grill>(FindObjectsSortMode.None))
         {
             if (betterPan)
@@ -268,53 +323,37 @@ public class GameManager : MonoBehaviour
             Debug.Log("GameManager: Extra serving zone disabled.");
         }
 
-        OrdersManager ordersManager = FindFirstObjectByType<OrdersManager>();
+        OrdersManager ordersManager = FindAnyObjectByType<OrdersManager>();
 
-        if (ordersManager != null &&
-            unlockCheeseBurger &&
-            cheeseBurgerRecipe != null)
+        if (ordersManager != null && unlockCheeseBurger && newRecipes != null)
         {
-            if (!ordersManager.possibleOrders.Contains(cheeseBurgerRecipe))
+            int added = 0;
+            foreach (BurgerRecipe r in newRecipes)
             {
-                ordersManager.possibleOrders.Add(cheeseBurgerRecipe);
-                Debug.Log("GameManager: Cheese burger recipe added to OrdersManager.");
+                if (r == null) continue;
+                if (!ordersManager.possibleOrders.Contains(r))
+                {
+                    ordersManager.possibleOrders.Add(r);
+                    added++;
+                }
             }
-            else
-            {
-                Debug.Log("GameManager: Cheese burger recipe already present in OrdersManager.");
-            }
+
+            Debug.Log($"GameManager: Applied NewRecipe upgrade - added {added} recipes to OrdersManager.");
         }
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (!applyGameplayUpgradesOnNextGameplayLoad)
-            return;
+        ApplyGameplayUpgradesIfNeeded(scene);
+    }
 
+    private void ApplyGameplayUpgradesIfNeeded(Scene scene)
+    {
         if (scene.name != gameplaySceneName)
-            return;
-
-        applyGameplayUpgradesOnNextGameplayLoad = false;
-        ApplyGameplayUpgrades();
-    }
-
-    private void RefreshGameplayReferences()
-    {
-        Counter[] counters = FindObjectsByType<Counter>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        foreach (Counter counter in counters)
         {
-            if (counter == null)
-                continue;
-
-            string counterName = counter.gameObject.name;
-            if (counterName == "Old Counter to Cutting Zone")
-                oldCounterToCuttingZone = counter.gameObject;
-            else if (counterName == "Extra Cutting Zone")
-                extraCuttingZoneObject = counter.gameObject;
-            else if (counterName == "Old Counter to Serving Zone")
-                oldCounterToServingZone = counter.gameObject;
-            else if (counterName == "Extra Serving Zone")
-                extraServingZoneObject = counter.gameObject;
+            return;
         }
+
+        ApplyGameplayUpgrades();
     }
 }
