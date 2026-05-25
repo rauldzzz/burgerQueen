@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d679f7757e133045b639928334524ee, type: 3}
+  m_Name: TomatonatorSteps
+  m_EditorClassIdentifier: Assembly-CSharp::BurgerAssemblyRecipe
+  burgerName: Tomatonator
+  startingStatePrefab: {fileID: 919132149155446097, guid: 3c442f99ad7766f45bea376d6e84fcd2, type: 3}
+  steps:
+  - currentStatePrefab: {fileID: 0}
+    requiredIngredientPrefab: {fileID: 919132149155446097, guid: 3c442f99ad7766f45bea376d6e84fcd2, type: 3}
+    nextStatePrefab: {fileID: 919132149155446097, guid: 3c442f99ad7766f45bea376d6e84fcd2, type: 3}
+  - currentStatePrefab: {fileID: 919132149155446097, guid: 3c442f99ad7766f45bea376d6e84fcd2, type: 3}
+    requiredIngredientPrefab: {fileID: 919132149155446097, guid: ee65a0cb6c5b11f42af45ee7eae2da68, type: 3}
+    nextStatePrefab: {fileID: 4856956598430296640, guid: 0805c20b978d35a4db88028b6c69be8e, type: 3}
+  - currentStatePrefab: {fileID: 4856956598430296640, guid: 0805c20b978d35a4db88028b6c69be8e, type: 3}
+    requiredIngredientPrefab: {fileID: 919132149155446097, guid: 0dfa1625b22aaf24794e079afac053cb, type: 3}
+    nextStatePrefab: {fileID: 4019997708222963938, guid: fefe52edad72f9f43bcc8015b126ef25, type: 3}
+  - currentStatePrefab: {fileID: 4019997708222963938, guid: fefe52edad72f9f43bcc8015b126ef25, type: 3}
+    requiredIngredientPrefab: {fileID: 919132149155446097, guid: 7530c38ff2c25764e85d4fb64ae5611d, type: 3}
+    nextStatePrefab: {fileID: 1859838790185572482, guid: b3e72096241dd80469e19c21cb3a4e26, type: 3}
+  - currentStatePrefab: {fileID: 1859838790185572482, guid: b3e72096241dd80469e19c21cb3a4e26, type: 3}
+    requiredIngredientPrefab: {fileID: 919132149155446097, guid: ee65a0cb6c5b11f42af45ee7eae2da68, type: 3}
+    nextStatePrefab: {fileID: 6718238259088262813, guid: c2d04046a2a2ca34b85976dd8afc9add, type: 3}
