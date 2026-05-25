@@ -46,12 +46,15 @@ public class GameManager : MonoBehaviour
     public GameObject oldCounterToServingZone;
     public GameObject extraServingZoneObject;    
 
+    private bool applyGameplayUpgradesOnNextGameplayLoad = false;
+
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
             Debug.Log("GameManager: instance created and marked DontDestroyOnLoad.");
 
             if (persistMoney)
@@ -98,6 +101,12 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             Debug.Log("GameManager: duplicate instance destroyed.");
         }
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+            SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     public void ResetGame()
@@ -152,9 +161,11 @@ public class GameManager : MonoBehaviour
 
         currentRound++;
 
-        ApplyGameplayUpgrades();
+        applyGameplayUpgradesOnNextGameplayLoad = true;
 
-        Debug.Log($"ROUND START - Round {currentRound}/{totalRounds}");
+        Debug.Log($"GameManager: Round {currentRound}/{totalRounds} | unlockCheeseBurger={unlockCheeseBurger}, betterPan={betterPan}, extraCuttingZone={extraCuttingZone}, extraServingZone={extraServingZone}");
+
+        // Upgrades are applied after the gameplay scene has finished loading, when its objects exist.
     }
 
     public void EndSession()
@@ -201,6 +212,8 @@ public class GameManager : MonoBehaviour
 
     private void ApplyGameplayUpgrades()
     {
+        RefreshGameplayReferences();
+
         foreach (Counter_Grill grill in FindObjectsOfType<Counter_Grill>())
         {
             if (betterPan)
@@ -270,6 +283,38 @@ public class GameManager : MonoBehaviour
             {
                 Debug.Log("GameManager: Cheese burger recipe already present in OrdersManager.");
             }
+        }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (!applyGameplayUpgradesOnNextGameplayLoad)
+            return;
+
+        if (scene.name != gameplaySceneName)
+            return;
+
+        applyGameplayUpgradesOnNextGameplayLoad = false;
+        ApplyGameplayUpgrades();
+    }
+
+    private void RefreshGameplayReferences()
+    {
+        Counter[] counters = FindObjectsOfType<Counter>(true);
+        foreach (Counter counter in counters)
+        {
+            if (counter == null)
+                continue;
+
+            string counterName = counter.gameObject.name;
+            if (counterName == "Old Counter to Cutting Zone")
+                oldCounterToCuttingZone = counter.gameObject;
+            else if (counterName == "Extra Cutting Zone")
+                extraCuttingZoneObject = counter.gameObject;
+            else if (counterName == "Old Counter to Serving Zone")
+                oldCounterToServingZone = counter.gameObject;
+            else if (counterName == "Extra Serving Zone")
+                extraServingZoneObject = counter.gameObject;
         }
     }
 }
