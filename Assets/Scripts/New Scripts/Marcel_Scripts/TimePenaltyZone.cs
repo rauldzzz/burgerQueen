@@ -30,7 +30,7 @@ public class TimePenaltyZone : MonoBehaviour
 
     void Awake()
     {
-        timer = FindObjectOfType<Timer>();
+        timer = FindFirstObjectByType<Timer>();
         // Prefer collider on same GameObject, fall back to child colliders
         zoneCollider = GetComponent<Collider>();
         if (zoneCollider == null)
@@ -210,7 +210,7 @@ public class TimePenaltyZone : MonoBehaviour
         if (seconds <= 0f) return;
         if (timer == null)
         {
-            timer = FindObjectOfType<Timer>();
+            timer = FindFirstObjectByType<Timer>();
             if (timer == null)
             {
                 if (debug) Debug.LogWarning("TimePenaltyZone: No Timer found in scene to apply penalty.");

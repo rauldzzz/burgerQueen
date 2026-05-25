@@ -2515,7 +2515,7 @@ Transform:
   m_GameObject: {fileID: 228490725}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -39.9, y: -0.44, z: 4.3}
+  m_LocalPosition: {x: 18.3, y: -0.44, z: 42.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -17013,7 +17013,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0643314355eb9b3449662450b5c4d130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Timer
-  timeRemaining: 30
+  timeRemaining: 200
   timerText: {fileID: 1655149788}
 --- !u!114 &1655149788
 MonoBehaviour:

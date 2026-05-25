@@ -6,7 +6,7 @@ public class Counter_Delivery : Counter
     {
         if (!player.IsHoldingItem()) return;
 
-        OrdersManager orderManager = FindObjectOfType<OrdersManager>();
+        OrdersManager orderManager = FindFirstObjectByType<OrdersManager>();
         if (orderManager == null) return;
 
         bool success = orderManager.CompleteOrder(Counter.NormalizeItemName(player.heldItemName));

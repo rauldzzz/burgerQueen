@@ -30,7 +30,7 @@ public class SoundManager : MonoBehaviour
 
         if (debugAudio)
         {
-            int listeners = FindObjectsOfType<AudioListener>().Length;
+            int listeners = FindObjectsByType<AudioListener>(FindObjectsSortMode.None).Length;
             Debug.Log("SoundManager Awake: listeners=" + listeners + ", cameraPos=" + cameraPosition + ", warningAssigned=" + (warning != null));
             if (listeners == 0)
                 Debug.LogWarning("SoundManager: No AudioListener found in scene. You will not hear audio.");
@@ -104,7 +104,7 @@ public class SoundManager : MonoBehaviour
 
     private Vector3 GetListenerPosition()
     {
-        AudioListener listener = FindObjectOfType<AudioListener>();
+        AudioListener listener = FindFirstObjectByType<AudioListener>();
         if (listener != null) return listener.transform.position;
 
         if (Camera.main != null) return Camera.main.transform.position;

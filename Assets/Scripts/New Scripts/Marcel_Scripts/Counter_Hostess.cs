@@ -17,12 +17,22 @@ public class Counter_Hostess : Counter
 
         if (ordersManager == null)
         {
-            ordersManager = FindObjectOfType<OrdersManager>();
+            ordersManager = FindFirstObjectByType<OrdersManager>();
         }
 
-        if (autoSpawnStartingState)
+        if (ordersManager != null)
         {
-            EnsureStartingState();
+            ordersManager.CurrentOrderChanged += HandleCurrentOrderChanged;
+        }
+
+        SyncToCurrentOrder();
+    }
+
+    private void OnDestroy()
+    {
+        if (ordersManager != null)
+        {
+            ordersManager.CurrentOrderChanged -= HandleCurrentOrderChanged;
         }
     }
 
@@ -177,6 +187,26 @@ public class Counter_Hostess : Counter
         PlaceItemAt(startingState, prefabToSpawn.name, itemSpawnPosition);
     }
 
+    private void SyncToCurrentOrder()
+    {
+        if (ordersManager == null)
+            return;
+
+        BurgerAssemblyRecipe recipe = GetRecipeForCurrentOrder() ?? (defaultRecipe != null ? defaultRecipe : FindFirstRecipeWithStartingState());
+        if (recipe == null)
+            return;
+
+        if (autoSpawnStartingState)
+        {
+            EnsureStartingState();
+        }
+    }
+
+    private void HandleCurrentOrderChanged()
+    {
+        SyncToCurrentOrder();
+    }
+
     private BurgerAssemblyRecipe FindFirstRecipeWithStartingState()
     {
         for (int i = 0; i < recipes.Count; i++)
@@ -274,7 +304,7 @@ public class Counter_Hostess : Counter
         // Prefer explicit reference
         if (ordersManager == null)
         {
-            ordersManager = FindObjectOfType<OrdersManager>();
+            ordersManager = FindFirstObjectByType<OrdersManager>();
         }
 
         if (ordersManager == null)

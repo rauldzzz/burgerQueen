@@ -30,7 +30,7 @@ public class UpgradeButton : MonoBehaviour
 
     private void Start()
     {
-        shopManager = FindObjectOfType<UpgradeShopManager>();
+        shopManager = FindFirstObjectByType<UpgradeShopManager>();
         buttonRenderer = targetRenderer != null ? targetRenderer : GetComponent<Renderer>();
 
         if (buttonRenderer != null)

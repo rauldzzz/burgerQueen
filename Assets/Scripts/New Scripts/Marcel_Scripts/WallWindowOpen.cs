@@ -9,7 +9,7 @@ public class WallWindowOpen : MonoBehaviour
 
     private void Start()
     {
-        ordersManager = FindObjectOfType<OrdersManager>();
+        ordersManager = FindFirstObjectByType<OrdersManager>();
         windowCollider = GetComponent<Collider>();
 
         if (windowCollider == null)
@@ -23,7 +23,7 @@ public class WallWindowOpen : MonoBehaviour
         if (otherObj == null) return;
 
         if (ordersManager == null)
-            ordersManager = FindObjectOfType<OrdersManager>();
+            ordersManager = FindFirstObjectByType<OrdersManager>();
 
         if (ordersManager == null) return;
 
@@ -74,7 +74,7 @@ public class WallWindowOpen : MonoBehaviour
         checkTimer = checkInterval;
 
         if (ordersManager == null)
-            ordersManager = FindObjectOfType<OrdersManager>();
+            ordersManager = FindFirstObjectByType<OrdersManager>();
 
         if (ordersManager == null)
         {

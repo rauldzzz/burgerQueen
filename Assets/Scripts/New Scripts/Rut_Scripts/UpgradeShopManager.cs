@@ -20,7 +20,7 @@ public class UpgradeShopManager : MonoBehaviour
 
     private void Start()
     {
-        upgradeButtons = FindObjectsOfType<UpgradeButton>();
+        upgradeButtons = FindObjectsByType<UpgradeButton>(FindObjectsSortMode.None);
         Debug.Log($"UpgradeShopManager: Found {upgradeButtons.Length} upgrade buttons.");
         if (continueRenderer == null)
             continueRenderer = GetComponent<Renderer>();

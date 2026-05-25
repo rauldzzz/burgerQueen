@@ -214,7 +214,7 @@ public class GameManager : MonoBehaviour
     {
         RefreshGameplayReferences();
 
-        foreach (Counter_Grill grill in FindObjectsOfType<Counter_Grill>())
+        foreach (Counter_Grill grill in FindObjectsByType<Counter_Grill>(FindObjectsSortMode.None))
         {
             if (betterPan)
             {
@@ -268,7 +268,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("GameManager: Extra serving zone disabled.");
         }
 
-        OrdersManager ordersManager = FindObjectOfType<OrdersManager>();
+        OrdersManager ordersManager = FindFirstObjectByType<OrdersManager>();
 
         if (ordersManager != null &&
             unlockCheeseBurger &&
@@ -300,7 +300,7 @@ public class GameManager : MonoBehaviour
 
     private void RefreshGameplayReferences()
     {
-        Counter[] counters = FindObjectsOfType<Counter>(true);
+        Counter[] counters = FindObjectsByType<Counter>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         foreach (Counter counter in counters)
         {
             if (counter == null)

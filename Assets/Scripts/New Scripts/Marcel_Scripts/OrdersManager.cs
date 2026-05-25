@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI; // �Importante a�adir esto para usar Image!
 using System.Collections.Generic;
 using TMPro;
+using System;
 
 public class OrdersManager : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class OrdersManager : MonoBehaviour
     public GameObject ingredientIconPrefab; // Un prefab que ser� solo un objeto de UI Image
 
     private BurgerRecipe currentOrder;
+
+    public event Action CurrentOrderChanged;
 
     public BurgerRecipe CurrentOrder => currentOrder;
 
@@ -41,10 +44,11 @@ public class OrdersManager : MonoBehaviour
     {
         if (possibleOrders.Count == 0) return;
 
-        currentOrder = possibleOrders[Random.Range(0, possibleOrders.Count)];
+        currentOrder = possibleOrders[UnityEngine.Random.Range(0, possibleOrders.Count)];
 
         UpdateUI();
         Debug.Log("OrdersManager: New order generated: " + currentOrder.burgerName + " (reward=" + currentOrder.reward + ")");
+        CurrentOrderChanged?.Invoke();
     }
 
     public bool CompleteOrder(string submittedBurgerName)
@@ -59,7 +63,7 @@ public class OrdersManager : MonoBehaviour
         {
             Debug.Log("OrdersManager: Order completed! +" + currentOrder.reward + " points.");
             
-            ScoreManager scoreManager = FindObjectOfType<ScoreManager>();
+            ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
             if (scoreManager != null)
                 scoreManager.AddMoney(currentOrder.reward);
             else

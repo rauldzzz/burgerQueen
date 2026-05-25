@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class GeneralSettingsApp : MonoBehaviour
 {
     private static GeneralSettingsApp Instance;
+    private AudioListener fallbackAudioListener;
 
     void Awake()
     {
@@ -46,7 +47,7 @@ public class GeneralSettingsApp : MonoBehaviour
 
     private void EnsureSingleEventSystem()
     {
-        EventSystem[] systems = FindObjectsOfType<EventSystem>(true);
+        EventSystem[] systems = FindObjectsByType<EventSystem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         if (systems.Length <= 1)
             return;
 
@@ -62,9 +63,12 @@ public class GeneralSettingsApp : MonoBehaviour
 
     private void EnsureSingleAudioListener()
     {
-        AudioListener[] listeners = FindObjectsOfType<AudioListener>(true);
-        if (listeners.Length <= 1)
+        AudioListener[] listeners = FindObjectsByType<AudioListener>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        if (listeners.Length == 0)
+        {
+            EnsureFallbackAudioListener();
             return;
+        }
 
         AudioListener keep = null;
         if (Camera.main != null)
@@ -76,6 +80,27 @@ public class GeneralSettingsApp : MonoBehaviour
         foreach (AudioListener listener in listeners)
         {
             listener.enabled = listener == keep;
+        }
+    }
+
+    private void EnsureFallbackAudioListener()
+    {
+        if (fallbackAudioListener == null)
+        {
+            GameObject fallbackObject = new GameObject("Persistent Audio Listener");
+            fallbackObject.transform.SetParent(transform);
+            fallbackObject.transform.localPosition = Vector3.zero;
+            fallbackObject.transform.localRotation = Quaternion.identity;
+            fallbackAudioListener = fallbackObject.AddComponent<AudioListener>();
+            DontDestroyOnLoad(fallbackObject);
+        }
+
+        fallbackAudioListener.enabled = true;
+
+        if (Camera.main != null)
+        {
+            fallbackAudioListener.transform.position = Camera.main.transform.position;
+            fallbackAudioListener.transform.rotation = Camera.main.transform.rotation;
         }
     }
 }
