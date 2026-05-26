@@ -344,6 +344,7 @@ public class GameManager : MonoBehaviour
         extraCuttingZoneObject = FindSceneObjectByName("Extra Cutting Zone", extraCuttingZoneObject);
         oldCounterToServingZone = FindSceneObjectByName("Old Counter to Serving Zone", oldCounterToServingZone);
         extraServingZoneObject = FindSceneObjectByName("Extra Serving Zone", extraServingZoneObject);
+        newPan = FindSceneObjectByName("Extra Pan", newPan);
     }
 
     private GameObject FindSceneObjectByName(string objectName, GameObject currentReference)

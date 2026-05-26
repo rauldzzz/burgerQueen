@@ -32,6 +32,8 @@ public static class UpgradeCache
         gm.extraServingZone = extraServingZone || gm.extraServingZone;
 
         Debug.Log($"UpgradeCache: Applied cached upgrades to GameManager. PendingSpend=${pendingSpend} (not applied to totalMoney here).");
+        gm.SaveGameplayUpgrades();
+        Debug.Log("UpgradeCache: Saved gameplay upgrades after applying cached values.");
         Clear();
     }
 }

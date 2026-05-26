@@ -1359,6 +1359,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05648a3b372ee90479ce1990fddccd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  rotationThreshold: 0.0001
+  rotationSpeed: 10
 --- !u!114 &434523116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1373,6 +1375,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteraction
   heldItem: {fileID: 0}
   heldItemName: 
+  sourceCounter: {fileID: 0}
+  activeCounter: {fileID: 0}
 --- !u!114 &434523117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3537,6 +3541,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StartScreenManager
   player1Spot: {fileID: 843971985}
   player2Spot: {fileID: 1255611714}
+  startDelaySeconds: 2
 --- !u!4 &1059356218
 Transform:
   m_ObjectHideFlags: 0
@@ -4021,6 +4026,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05648a3b372ee90479ce1990fddccd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  rotationThreshold: 0.0001
+  rotationSpeed: 10
 --- !u!114 &1149109196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4035,6 +4042,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteraction
   heldItem: {fileID: 0}
   heldItemName: 
+  sourceCounter: {fileID: 0}
+  activeCounter: {fileID: 0}
 --- !u!114 &1149109197
 MonoBehaviour:
   m_ObjectHideFlags: 0
