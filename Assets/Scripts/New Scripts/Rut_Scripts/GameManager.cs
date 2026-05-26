@@ -51,6 +51,8 @@ public class GameManager : MonoBehaviour
     public GameObject oldCounterToServingZone;
     public GameObject extraServingZoneObject;
 
+    public GameObject newPan;
+
     private void Awake()
     {
         if (Instance == null)
@@ -265,13 +267,15 @@ public class GameManager : MonoBehaviour
         {
             if (betterPan)
             {
-                grill.ApplyInteractDelayMultiplier(grillSpeedMultiplier);
-                Debug.Log($"GameManager: Applied better pan (mult={grillSpeedMultiplier}) to {grill.name}.");
+                if (newPan != null)
+                    newPan.SetActive(true);
+                Debug.Log("GameManager: Better pan enabled.");
             }
             else
             {
-                grill.ResetInteractDelay();
-                Debug.Log($"GameManager: Reset interact delay on {grill.name}.");
+                if (newPan != null)
+                    newPan.SetActive(false);
+                Debug.Log("GameManager: Better pan disabled.");
             }
         }
 
