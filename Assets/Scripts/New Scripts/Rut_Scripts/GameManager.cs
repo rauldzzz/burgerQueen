@@ -84,14 +84,11 @@ public class GameManager : MonoBehaviour
                 Debug.Log("GameManager: Loaded resumeAfterUpgrade from PlayerPrefs.");
             }
 
-            LoadGameplayUpgrades();
-
             // If upgrades were purchased while GameManager wasn't present, apply them now
             if (UpgradeCache.HasPending())
             {
                 Debug.Log("GameManager: Found pending upgrades in UpgradeCache, applying now.");
                 UpgradeCache.ApplyTo(this);
-                SaveGameplayUpgrades();
             }
 
             if (resumeAfterUpgrade)
@@ -132,6 +129,7 @@ public class GameManager : MonoBehaviour
         betterPan = false;
         extraCuttingZone = false;
         extraServingZone = false;
+        UpgradeCache.Clear();
         ClearSavedUpgrades();
         Debug.Log("GameManager: Reset game state to defaults.");
     }
@@ -225,15 +223,6 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetInt(PrefsExtraServingZoneKey, extraServingZone ? 1 : 0);
         PlayerPrefs.Save();
         Debug.Log($"GameManager: Saved gameplay upgrades -> cheese={unlockCheeseBurger}, pan={betterPan}, cutting={extraCuttingZone}, serving={extraServingZone}.");
-    }
-
-    private void LoadGameplayUpgrades()
-    {
-        unlockCheeseBurger = PlayerPrefs.GetInt(PrefsUnlockCheeseBurgerKey, unlockCheeseBurger ? 1 : 0) == 1;
-        betterPan = PlayerPrefs.GetInt(PrefsBetterPanKey, betterPan ? 1 : 0) == 1;
-        extraCuttingZone = PlayerPrefs.GetInt(PrefsExtraCuttingZoneKey, extraCuttingZone ? 1 : 0) == 1;
-        extraServingZone = PlayerPrefs.GetInt(PrefsExtraServingZoneKey, extraServingZone ? 1 : 0) == 1;
-        Debug.Log($"GameManager: Loaded gameplay upgrades -> cheese={unlockCheeseBurger}, pan={betterPan}, cutting={extraCuttingZone}, serving={extraServingZone}.");
     }
 
     public bool IsUpgradePurchased(UpgradeButton.UpgradeType upgradeType)
