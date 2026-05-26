@@ -18,12 +18,13 @@ public class UpgradeButton : MonoBehaviour
     public Renderer targetRenderer;
     public Color selectedColor = Color.green;
     public Color disabledColor = Color.red;
-
+    public Color appliedColor = new Color(0.5f, 0.5f, 0.5f); // Grey for upgrades already applied
     [HideInInspector]
     public bool isSelected = false;
 
     private float currentHoldTime = 0f;
     private bool isPlayerInside = false;
+    private bool isAlreadyApplied = false; // Track if the upgrade has already been applied
     private Color originalColor = Color.white;
     private UpgradeShopManager shopManager;
     private Renderer buttonRenderer;
@@ -46,10 +47,40 @@ public class UpgradeButton : MonoBehaviour
         // If inspector left upgradeType as default for multiple buttons, try inferring from object name
         InferUpgradeTypeFromName();
 
-        Debug.Log($"UpgradeButton.Start: {gameObject.name} -> upgradeType={upgradeType}, price=${price}, shopManager={(shopManager!=null)}.");
+        // Verificar si el upgrade ya ha sido aplicado
+        CheckIfAlreadyApplied();
+
+        Debug.Log($"UpgradeButton.Start: {gameObject.name} -> upgradeType={upgradeType}, price=${price}, shopManager={(shopManager!=null)}, alreadyApplied={isAlreadyApplied}.");
 
         SetPriceText();
         UpdateVisual();
+    }
+
+    private void CheckIfAlreadyApplied()
+    {
+        isAlreadyApplied = false;
+        
+        if (GameManager.Instance != null)
+        {
+            switch (upgradeType)
+            {
+                case UpgradeType.NewRecipe:
+                    isAlreadyApplied = GameManager.Instance.unlockCheeseBurger;
+                    break;
+                case UpgradeType.BetterPan:
+                    isAlreadyApplied = GameManager.Instance.betterPan;
+                    break;
+                case UpgradeType.ExtraCuttingZone:
+                    isAlreadyApplied = GameManager.Instance.extraCuttingZone;
+                    break;
+                case UpgradeType.ExtraServingZone:
+                    isAlreadyApplied = GameManager.Instance.extraServingZone;
+                    break;
+            }
+        }
+        
+        if (isAlreadyApplied)
+            Debug.Log($"UpgradeButton: {gameObject.name} ({upgradeType}) ya ha sido aplicado.");
     }
 
     private void SetPriceText()
@@ -57,7 +88,8 @@ public class UpgradeButton : MonoBehaviour
         if (priceText != null)
         {
             string label = GetReadableLabel();
-            priceText.text = string.Format("{0}\n$ {1}", label, price);
+            string statusText = isAlreadyApplied ? " (Applied)" : "";
+            priceText.text = string.Format("{0}\n$ {1}{2}", label, price, statusText);
             Debug.Log($"UpgradeButton: SetPriceText on {gameObject.name} -> '{priceText.text}'.");
         }
     }
@@ -134,6 +166,10 @@ public class UpgradeButton : MonoBehaviour
 
     private void Update()
     {
+        // Si el upgrade ya fue aplicado, no hacer nada
+        if (isAlreadyApplied)
+            return;
+
         if (isSelected || !isPlayerInside)
             return;
 
@@ -191,7 +227,9 @@ public class UpgradeButton : MonoBehaviour
 
     private void UpdateVisual()
     {
-        if (isSelected)
+        if (isAlreadyApplied)
+            SetButtonColor(appliedColor);
+        else if (isSelected)
             SetButtonColor(selectedColor);
         else
             SetButtonColor(originalColor);
