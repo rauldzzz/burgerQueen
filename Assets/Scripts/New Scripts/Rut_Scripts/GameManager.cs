@@ -91,6 +91,7 @@ public class GameManager : MonoBehaviour
             {
                 Debug.Log("GameManager: Found pending upgrades in UpgradeCache, applying now.");
                 UpgradeCache.ApplyTo(this);
+                SaveGameplayUpgrades();
             }
 
             if (resumeAfterUpgrade)
@@ -269,6 +270,8 @@ public class GameManager : MonoBehaviour
 
     private void ApplyGameplayUpgrades()
     {
+        RebindGameplayZoneReferences();
+
         foreach (Counter_Grill grill in FindObjectsByType<Counter_Grill>(FindObjectsSortMode.None))
         {
             if (betterPan)
@@ -340,6 +343,30 @@ public class GameManager : MonoBehaviour
 
             Debug.Log($"GameManager: Applied NewRecipe upgrade - added {added} recipes to OrdersManager.");
         }
+    }
+
+    private void RebindGameplayZoneReferences()
+    {
+        oldCounterToCuttingZone = FindSceneObjectByName("Old Counter to Cutting Zone", oldCounterToCuttingZone);
+        extraCuttingZoneObject = FindSceneObjectByName("Extra Cutting Zone", extraCuttingZoneObject);
+        oldCounterToServingZone = FindSceneObjectByName("Old Counter to Serving Zone", oldCounterToServingZone);
+        extraServingZoneObject = FindSceneObjectByName("Extra Serving Zone", extraServingZoneObject);
+    }
+
+    private GameObject FindSceneObjectByName(string objectName, GameObject currentReference)
+    {
+        if (currentReference != null)
+            return currentReference;
+
+        Transform[] sceneTransforms = FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (Transform transform in sceneTransforms)
+        {
+            if (transform != null && transform.gameObject.scene.name == gameplaySceneName && transform.name == objectName)
+                return transform.gameObject;
+        }
+
+        Debug.LogWarning($"GameManager: Could not rebind gameplay object '{objectName}' in scene '{gameplaySceneName}'.");
+        return null;
     }
 
     private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)

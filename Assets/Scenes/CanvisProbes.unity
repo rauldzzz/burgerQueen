@@ -12760,7 +12760,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::OrdersManager
   possibleOrders:
   - {fileID: 11400000, guid: b3fb7e60ad712184594907d1c5bc18b2, type: 2}
-  - {fileID: 11400000, guid: a431bb92b4562f643b5caa8613fa03aa, type: 2}
+  - {fileID: 11400000, guid: 53e2342d031ef464db3f7303c1f44f01, type: 2}
   orderText: {fileID: 1556343290}
   finalBurgerDisplay: {fileID: 1414924403}
   ingredientsContainer: {fileID: 827380873}
@@ -17018,7 +17018,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0643314355eb9b3449662450b5c4d130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Timer
-  timeRemaining: 200
+  timeRemaining: 150
   timerText: {fileID: 1655149788}
 --- !u!114 &1655149788
 MonoBehaviour:

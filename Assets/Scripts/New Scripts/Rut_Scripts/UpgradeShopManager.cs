@@ -135,6 +135,8 @@ public class UpgradeShopManager : MonoBehaviour
                 }
             }
 
+            GameManager.Instance.SaveGameplayUpgrades();
+
             GameManager.Instance.SpendMoney(selectedTotal);
             Debug.Log($"UpgradeShopManager: Spending ${selectedTotal}. Remaining money=${GameManager.Instance.currentMoney}.");
             UpdateMoneyText();
