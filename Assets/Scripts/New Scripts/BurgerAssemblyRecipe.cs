@@ -41,6 +41,29 @@ public class BurgerAssemblyRecipe : ScriptableObject
         return false;
     }
 
+    public bool TryGetStepByNextState(string nextStateName, out BurgerAssemblyStep step)
+    {
+        string normalizedNextStateName = NormalizePrefabName(nextStateName);
+
+        for (int i = 0; i < steps.Count; i++)
+        {
+            BurgerAssemblyStep candidate = steps[i];
+
+            if (candidate == null) continue;
+            if (candidate.currentStatePrefab == null) continue;
+            if (candidate.requiredIngredientPrefab == null) continue;
+            if (candidate.nextStatePrefab == null) continue;
+
+            if (NormalizePrefabName(candidate.nextStatePrefab.name) != normalizedNextStateName) continue;
+
+            step = candidate;
+            return true;
+        }
+
+        step = null;
+        return false;
+    }
+
     private static string NormalizePrefabName(string name)
     {
         if (string.IsNullOrEmpty(name)) return name;

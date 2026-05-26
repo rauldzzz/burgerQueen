@@ -42,8 +42,13 @@ public class Counter_Hostess : Counter
 
         if (!player.IsHoldingItem() && HasItem())
         {
+            if (IsFinalBurgerStateForAnyRecipe(itemNameOnCounter))
+            {
+                return true;
+            }
+
             BurgerAssemblyRecipe recipe = GetRecipeForCurrentOrder() ?? defaultRecipe;
-            return recipe != null && IsFinalBurgerState(recipe, itemNameOnCounter);
+            return recipe != null && CanStepBack(recipe, itemNameOnCounter);
         }
 
         if (player.IsHoldingItem() && !HasItem())
@@ -81,7 +86,28 @@ public class Counter_Hostess : Counter
         {
             if (HasItem())
             {
+                if (IsFinalBurgerStateForAnyRecipe(itemNameOnCounter))
+                {
+                    GameObject finalBurger = TakeItem();
+                    if (finalBurger != null)
+                    {
+                        player.PickUp(finalBurger, finalBurger.name, this);
+                    }
+
+                    return;
+                }
+
                 BurgerAssemblyRecipe recipe = GetRecipeForCurrentOrder() ?? defaultRecipe;
+                if (recipe == null)
+                {
+                    return;
+                }
+
+                if (TryStepBackAndTakeIngredient(recipe, player))
+                {
+                    return;
+                }
+
                 if (!IsFinalBurgerState(recipe, itemNameOnCounter))
                 {
                     return;
@@ -129,6 +155,40 @@ public class Counter_Hostess : Counter
         PlaceItemAt(nextState, step.nextStatePrefab.name, itemSpawnPosition);
 
         Debug.Log("Burger advanced to: " + step.nextStatePrefab.name);
+    }
+
+    private bool TryStepBackAndTakeIngredient(BurgerAssemblyRecipe recipe, PlayerInteraction player)
+    {
+        if (recipe == null || player == null || string.IsNullOrEmpty(itemNameOnCounter))
+        {
+            return false;
+        }
+
+        if (!recipe.TryGetStepByNextState(itemNameOnCounter, out BurgerAssemblyRecipe.BurgerAssemblyStep step))
+        {
+            return false;
+        }
+
+        if (step.currentStatePrefab == null || step.requiredIngredientPrefab == null)
+        {
+            return false;
+        }
+
+        GameObject currentState = TakeItem();
+        if (currentState != null)
+        {
+            Destroy(currentState);
+        }
+
+        GameObject previousState = Instantiate(step.currentStatePrefab);
+        PlaceItemAt(previousState, step.currentStatePrefab.name, itemSpawnPosition);
+
+        GameObject ingredient = Instantiate(step.requiredIngredientPrefab);
+        ingredient.transform.localScale = Vector3.one * itemScale;
+        player.PickUp(ingredient, ingredient.name, this);
+
+        Debug.Log("Burger stepped back to: " + step.currentStatePrefab.name + " and ingredient returned: " + step.requiredIngredientPrefab.name);
+        return true;
     }
 
     public void PlaceItemAt(GameObject item, string itemName, Vector3 localPosition)
@@ -297,6 +357,42 @@ public class Counter_Hostess : Counter
         }
 
         return matchesAnyNextState;
+    }
+
+    private bool CanStepBack(BurgerAssemblyRecipe recipe, string stateName)
+    {
+        if (recipe == null || string.IsNullOrEmpty(stateName))
+        {
+            return false;
+        }
+
+        return recipe.TryGetStepByNextState(stateName, out _);
+    }
+
+    private bool IsFinalBurgerStateForAnyRecipe(string stateName)
+    {
+        if (string.IsNullOrEmpty(stateName))
+        {
+            return false;
+        }
+
+        if (defaultRecipe != null && IsFinalBurgerState(defaultRecipe, stateName))
+        {
+            return true;
+        }
+
+        for (int i = 0; i < recipes.Count; i++)
+        {
+            BurgerAssemblyRecipe recipe = recipes[i];
+            if (recipe == null) continue;
+
+            if (IsFinalBurgerState(recipe, stateName))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private BurgerAssemblyRecipe GetRecipeForCurrentOrder()
