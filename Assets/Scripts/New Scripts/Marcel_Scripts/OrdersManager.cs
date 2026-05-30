@@ -112,6 +112,13 @@ public class OrdersManager : MonoBehaviour
             else
                 Debug.LogWarning("OrdersManager: ScoreManager not found in scene!");
 
+            // Estadístiques de la partida
+            if (SessionStatistics.Instance != null)
+            {
+                SessionStatistics.Instance.AddBurger(currentOrder.burgerName);
+                SessionStatistics.Instance.AddMoneyEarned(currentOrder.reward);
+            }
+
             GenerateNewOrder();
             return true;
         }

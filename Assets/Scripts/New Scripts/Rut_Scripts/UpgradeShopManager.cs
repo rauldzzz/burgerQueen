@@ -136,6 +136,12 @@ public class UpgradeShopManager : MonoBehaviour
             }
 
             GameManager.Instance.SpendMoney(selectedTotal);
+
+            if (SessionStatistics.Instance != null)
+            {
+                SessionStatistics.Instance.AddMoneySpent(selectedTotal);
+            }
+
             Debug.Log($"UpgradeShopManager: Spending ${selectedTotal}. Remaining money=${GameManager.Instance.currentMoney}.");
             UpdateMoneyText();
             ResetSelections();
@@ -176,6 +182,12 @@ public class UpgradeShopManager : MonoBehaviour
             if (ScoreManager.Instance != null)
             {
                 ScoreManager.Instance.AddMoney(-selectedTotal);
+
+                if (SessionStatistics.Instance != null)
+                {
+                    SessionStatistics.Instance.AddMoneySpent(selectedTotal);
+                }
+
                 Debug.Log($"UpgradeShopManager: Deducted ${selectedTotal} from ScoreManager (now ${ScoreManager.Instance.GetMoney()}).");
             }
             else
