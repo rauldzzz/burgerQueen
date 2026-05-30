@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     public string initialSceneName = "Inici";
     public string gameplaySceneName = "CanvisProbes";
     public string upgradeSceneName = "UpgradeShop";
+    public string finalSceneName = "FinalScene";
 
     [Header("Rounds")]
     public int totalRounds = 3;
@@ -177,9 +178,9 @@ public class GameManager : MonoBehaviour
 
     public void EndSession()
     {
-        ResetGame();
-        Debug.Log("GameManager: Ending session and returning to initial scene.");
-        SceneManager.LoadScene(initialSceneName);
+        Debug.Log("GameManager: Session completed. Loading final scene.");
+
+        SceneManager.LoadScene(finalSceneName);
     }
 
     public static void SaveCachedMoney()
@@ -376,5 +377,16 @@ public class GameManager : MonoBehaviour
         }
 
         ApplyGameplayUpgrades();
+    }
+
+    public void RestartGame()
+    {
+        if (SessionStatistics.Instance != null)
+            SessionStatistics.Instance.ResetStats();
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.ResetGame();
+
+        SceneManager.LoadScene("Inici");
     }
 }

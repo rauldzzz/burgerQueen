@@ -115,8 +115,13 @@ public class OrdersManager : MonoBehaviour
             // Estadístiques de la partida
             if (SessionStatistics.Instance != null)
             {
+                Debug.Log("SessionStatistics FOUND");
                 SessionStatistics.Instance.AddBurger(currentOrder.burgerName);
                 SessionStatistics.Instance.AddMoneyEarned(currentOrder.reward);
+            }
+            else
+            {
+                Debug.LogError("SessionStatistics IS NULL");
             }
 
             GenerateNewOrder();

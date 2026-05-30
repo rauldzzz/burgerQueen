@@ -30,11 +30,7 @@ public class SessionStatistics : MonoBehaviour
             burgersPrepared[burgerName] = 0;
 
         burgersPrepared[burgerName]++;
-<<<<<<< Updated upstream
         Debug.Log($"Burger registrada: {burgerName}");
-
-=======
->>>>>>> Stashed changes
     }
 
     public int GetBurgerCount(string burgerName)
@@ -57,37 +53,25 @@ public class SessionStatistics : MonoBehaviour
     public void AddMoneyEarned(int amount)
     {
         totalMoneyEarned += amount;
-<<<<<<< Updated upstream
         Debug.Log($"Money earned +{amount} | Total = {totalMoneyEarned}");
-=======
->>>>>>> Stashed changes
     }
 
     public void AddMoneySpent(int amount)
     {
         totalMoneySpent += amount;
-<<<<<<< Updated upstream
         Debug.Log($"Money spent +{amount} | Total = {totalMoneySpent}");
-=======
->>>>>>> Stashed changes
     }
 
     public int GetRemainingMoney()
     {
-<<<<<<< Updated upstream
         if (GameManager.Instance != null)
             return GameManager.Instance.currentMoney;
 
         return totalMoneyEarned - totalMoneySpent;
-
     }
-
     public Dictionary<string, int> GetAllBurgerCounts()
     {
         return burgersPrepared;
-=======
-        return totalMoneyEarned - totalMoneySpent;
->>>>>>> Stashed changes
     }
 
     public void ResetStats()
