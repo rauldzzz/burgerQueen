@@ -292,7 +292,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -465.7, y: -384.6}
+  m_AnchoredPosition: {x: -455.7, y: -384.6}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &71594054
@@ -1064,7 +1064,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -465.7, y: -384.6}
+  m_AnchoredPosition: {x: -455.7, y: -384.6}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &332811088
@@ -1925,7 +1925,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -465.7, y: -384.6}
+  m_AnchoredPosition: {x: -455.7, y: -384.6}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &462260286
@@ -3537,7 +3537,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -465.7, y: -384.6}
+  m_AnchoredPosition: {x: -455.7, y: -384.6}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &951179248
@@ -3691,7 +3691,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -465.7, y: -384.6}
+  m_AnchoredPosition: {x: -455.7, y: -384.6}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &973566373
@@ -4239,7 +4239,7 @@ MonoBehaviour:
   instructionsText: {fileID: 1555748589}
   instructionsForwardSpeed: 8
   instructionsReadTime: 0
-  instructionsForwardDistance: 350
+  instructionsForwardDistance: 300
   videoRawImages:
   - {fileID: 462260286}
   - {fileID: 951179248}
@@ -5163,7 +5163,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -465.7, y: -384.6}
+  m_AnchoredPosition: {x: -455.7, y: -384.6}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1238543795
@@ -6144,7 +6144,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -465.7, y: -384.6}
+  m_AnchoredPosition: {x: -455.7, y: -384.6}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1394975786
@@ -6945,9 +6945,12 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Welcome to BurgerQueen!\n\nThis game is absolutely not based on any famous
     fast-food chain. We\u2019re just here to crown the queens of a gloriously fake
-    action story. \r\n\r\nYou\u2019ll play through 3 rounds, and your goal is to
-    make as many burgers as possible.\r\n\r\nTake a look to the mechanics:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMove
-    fast, stay organized, and serve the best burgers you can. \n\nGood luck!"
+    action story. \n\nYou\u2019ll play through 3 rounds, and your goal is to make
+    as many burgers as possible.\n\nTake a look to the mechanics:\n\n\n<align=\"left\"><indent=10%>\nGrab:\n\n\n\n           
+    \r\nPlace:\n\n\n\n\n            \r\nCook:\n\n\n\n\n              \r\nCut:    
+    \n\n\n\n\n          \r\nAssemble:\n\n\n\n\n\n                \r\nDeliver:   \n\n\n\n                 
+    \r\nBuy              </indent></align>\n\n\n\n\nMove fast, stay organized, and
+    serve the best burgers you can. \n\nGood luck!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ca83663c29f6c5b44a1208c748450225, type: 2}
   m_sharedMaterial: {fileID: -8139313331203585724, guid: ca83663c29f6c5b44a1208c748450225, type: 2}
