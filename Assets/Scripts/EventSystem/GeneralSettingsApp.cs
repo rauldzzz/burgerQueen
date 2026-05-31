@@ -71,7 +71,9 @@ public class GeneralSettingsApp : MonoBehaviour
         }
 
         AudioListener keep = null;
-        if (Camera.main != null)
+        keep = FindPreferredCamera1Listener();
+
+        if (keep == null && Camera.main != null)
             keep = Camera.main.GetComponent<AudioListener>();
 
         if (keep == null)
@@ -81,6 +83,15 @@ public class GeneralSettingsApp : MonoBehaviour
         {
             listener.enabled = listener == keep;
         }
+    }
+
+    private AudioListener FindPreferredCamera1Listener()
+    {
+        GameObject camera1 = GameObject.Find("Camera1");
+        if (camera1 == null)
+            return null;
+
+        return camera1.GetComponent<AudioListener>();
     }
 
     private void EnsureFallbackAudioListener()
@@ -97,10 +108,11 @@ public class GeneralSettingsApp : MonoBehaviour
 
         fallbackAudioListener.enabled = true;
 
-        if (Camera.main != null)
+        GameObject camera1 = GameObject.Find("Camera1");
+        if (camera1 != null)
         {
-            fallbackAudioListener.transform.position = Camera.main.transform.position;
-            fallbackAudioListener.transform.rotation = Camera.main.transform.rotation;
+            fallbackAudioListener.transform.position = camera1.transform.position;
+            fallbackAudioListener.transform.rotation = camera1.transform.rotation;
         }
     }
 }
