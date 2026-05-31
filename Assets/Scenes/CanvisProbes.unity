@@ -8179,7 +8179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimePenaltyZone
   targetTag: Player
-  timeLossPerMeter: 0.1
+  timeLossPerMeter: 0.3
   applyContinuously: 1
   enforceTrigger: 1
   debug: 1
