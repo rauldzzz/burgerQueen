@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,10 +19,18 @@ public class TimePenaltyZone : MonoBehaviour
     [Tooltip("If enabled, ensures the collider on this GameObject is a trigger.")]
     public bool enforceTrigger = true;
 
+    [Header("Warning UI")]
+    public Timer timer;
+    public GameObject alertObject;
+    public float alertBlinkInterval = 0.5f;
+
     public bool debug = true; // enable by default to aid debugging
 
-    Timer timer;
     Collider zoneCollider;
+
+    private Coroutine alertBlinkRoutine;
+    private Color defaultTimerColor = Color.white;
+    private bool warningActive = false;
 
     class TrackData { public Vector3 lastPos; public float accumulatedDistance; }
     Dictionary<Transform, TrackData> tracked = new Dictionary<Transform, TrackData>();
@@ -30,7 +39,23 @@ public class TimePenaltyZone : MonoBehaviour
 
     void Awake()
     {
-        timer = FindFirstObjectByType<Timer>();
+        if (timer == null)
+        {
+            timer = FindFirstObjectByType<Timer>();
+        }
+
+        if (timer != null && timer.timerText != null)
+        {
+            defaultTimerColor = timer.timerText.color;
+        }
+
+        if (alertObject == null)
+        {
+            alertObject = FindAlertObject();
+        }
+
+        SetWarningVisualState(false);
+
         // Prefer collider on same GameObject, fall back to child colliders
         zoneCollider = GetComponent<Collider>();
         if (zoneCollider == null)
@@ -77,7 +102,10 @@ public class TimePenaltyZone : MonoBehaviour
             bool wasEmpty = tracked.Count == 0;
             tracked[t] = new TrackData { lastPos = t.position, accumulatedDistance = 0f };
             if (wasEmpty && SoundManager.Instance != null)
+            {
                 SoundManager.Instance.StartWarningLoop();
+                StartWarningVisualState();
+            }
         }
         Debug.Log($"TimePenaltyZone: Enter - object='{other.name}', tag='{other.tag}', pos={other.transform.position}");
     }
@@ -96,7 +124,10 @@ public class TimePenaltyZone : MonoBehaviour
             }
             tracked.Remove(t);
             if (tracked.Count == 0 && SoundManager.Instance != null)
+            {
                 SoundManager.Instance.StopWarningLoop();
+                StopWarningVisualState();
+            }
         }
     }
 
@@ -168,7 +199,10 @@ public class TimePenaltyZone : MonoBehaviour
                     bool wasEmpty = tracked.Count == 0;
                     tracked[t] = new TrackData { lastPos = t.position, accumulatedDistance = 0f };
                     if (wasEmpty && SoundManager.Instance != null)
+                    {
                         SoundManager.Instance.StartWarningLoop();
+                        StartWarningVisualState();
+                    }
                 }
             }
         }
@@ -192,7 +226,10 @@ public class TimePenaltyZone : MonoBehaviour
                 }
                 tracked.Remove(t);
                 if (tracked.Count == 0 && SoundManager.Instance != null)
+                {
                     SoundManager.Instance.StopWarningLoop();
+                    StopWarningVisualState();
+                }
             }
         }
 
@@ -226,5 +263,97 @@ public class TimePenaltyZone : MonoBehaviour
     {
         if (SoundManager.Instance != null)
             SoundManager.Instance.StopWarningLoop();
+
+        StopWarningVisualState();
+    }
+
+    private void StartWarningVisualState()
+    {
+        warningActive = true;
+
+        if (timer != null)
+        {
+            timer.SetWarningState(true);
+        }
+
+        if (alertBlinkRoutine == null)
+        {
+            alertBlinkRoutine = StartCoroutine(BlinkAlertRoutine());
+        }
+    }
+
+    private void StopWarningVisualState()
+    {
+        warningActive = false;
+
+        if (alertBlinkRoutine != null)
+        {
+            StopCoroutine(alertBlinkRoutine);
+            alertBlinkRoutine = null;
+        }
+
+        if (alertObject != null)
+        {
+            alertObject.SetActive(false);
+        }
+
+        if (timer != null)
+        {
+            timer.SetWarningState(false);
+        }
+    }
+
+    private IEnumerator BlinkAlertRoutine()
+    {
+        if (alertObject != null)
+        {
+            alertObject.SetActive(false);
+        }
+
+        while (warningActive)
+        {
+            if (alertObject != null)
+            {
+                alertObject.SetActive(!alertObject.activeSelf);
+            }
+
+            yield return new WaitForSeconds(alertBlinkInterval);
+        }
+
+        if (alertObject != null)
+        {
+            alertObject.SetActive(false);
+        }
+
+        alertBlinkRoutine = null;
+    }
+
+    private void SetWarningVisualState(bool isWarning)
+    {
+        warningActive = isWarning;
+
+        if (timer != null)
+        {
+            timer.SetWarningState(isWarning);
+        }
+
+        if (alertObject != null)
+        {
+            alertObject.SetActive(false);
+        }
+    }
+
+    private GameObject FindAlertObject()
+    {
+        Transform[] transforms = FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (int i = 0; i < transforms.Length; i++)
+        {
+            if (transforms[i] != null && transforms[i].name == "Alert")
+            {
+                return transforms[i].gameObject;
+            }
+        }
+
+        return null;
     }
 }

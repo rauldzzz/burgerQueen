@@ -593,8 +593,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Player 2\n\u2193"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ca83663c29f6c5b44a1208c748450225, type: 2}
+  m_sharedMaterial: {fileID: -8139313331203585724, guid: ca83663c29f6c5b44a1208c748450225, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1230,8 +1230,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Player 1 \n\u2193"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ca83663c29f6c5b44a1208c748450225, type: 2}
+  m_sharedMaterial: {fileID: -8139313331203585724, guid: ca83663c29f6c5b44a1208c748450225, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2903,6 +2903,87 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 890630304}
   m_CullTransparentMesh: 1
+--- !u!1 &910199441
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 910199442}
+  - component: {fileID: 910199444}
+  - component: {fileID: 910199443}
+  m_Layer: 5
+  m_Name: video1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &910199442
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910199441}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 4.7}
+  m_LocalScale: {x: 1.25, y: 0.5, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1587452695}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -471.8, y: -384.6}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!328 &910199443
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910199441}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 0}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 0}
+  m_TargetTexture: {fileID: 0}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: <noninit>
+  m_RenderMode: 2
+  m_AspectRatio: 2
+  m_DataSource: 0
+  m_TimeUpdateMode: 2
+  m_PlaybackSpeed: 1
+  m_AudioOutputMode: 2
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
+  m_Url: 
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
+  m_PlayOnAwake: 1
+  m_SkipOnDrop: 1
+  m_Looping: 0
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []
+--- !u!222 &910199444
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910199441}
+  m_CullTransparentMesh: 1
 --- !u!1 &949128498
 GameObject:
   m_ObjectHideFlags: 0
@@ -2962,8 +3043,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Stand on the marked spots to start!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ca83663c29f6c5b44a1208c748450225, type: 2}
+  m_sharedMaterial: {fileID: -8139313331203585724, guid: ca83663c29f6c5b44a1208c748450225, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5860,18 +5941,17 @@ MonoBehaviour:
   m_text: "Welcome to BurgerQueen!\n\nThis game is absolutely not based on any famous
     fast-food chain. We\u2019re just here to crown the queens of a gloriously fake
     action story. \r\n\r\nYou\u2019ll play through 3 rounds, and your goal is to
-    make as many burgers as possible. Communication is key, so work together and
-    coordinate your moves to stay fast and efficient.\r\n\r\nTo pick up an object,
-    just hold your hand over it until you grab it. Take the ingredients to the BurgerQueen
-    tray to build the burger in the exact order shown on the screen. If an ingredient
+    make as many burgers as possible.\r\n\r\nTo pick up an object, just hold your
+    hand over it until you grab it. \n\nTake the ingredients to the BurgerQueen tray
+    to build the burger in the exact order shown on the screen. \n\nIf an ingredient
     needs to be cooked, bring it to the pan first, but be careful not to burn it
-    before adding it to the burger. To cut vegetables, bring them to the chopping
+    before adding it to the burger. \n\nTo cut vegetables, bring them to the chopping
     board before using them.\r\n\r\nBetween rounds, you can buy upgrades by placing
     your hand over the upgrade indicator.\r\n\r\nMove fast, stay organized, and serve
     the best burgers you can. \n\nGood luck!"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ca83663c29f6c5b44a1208c748450225, type: 2}
+  m_sharedMaterial: {fileID: -8139313331203585724, guid: ca83663c29f6c5b44a1208c748450225, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5895,8 +5975,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 6
-  m_fontSizeBase: 6
+  m_fontSize: 4
+  m_fontSizeBase: 4
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6182,6 +6262,7 @@ RectTransform:
   m_Children:
   - {fileID: 1688670852}
   - {fileID: 1842351616}
+  - {fileID: 910199442}
   - {fileID: 843971981}
   - {fileID: 1255611718}
   - {fileID: 949128499}

@@ -8,6 +8,15 @@ public class Timer : MonoBehaviour
     public TextMeshProUGUI timerText;
 
     private bool isRunning = true; //per parar quan arribi a 0
+    private Color defaultTimerColor = Color.white;
+
+    void Start()
+    {
+        if (timerText != null)
+        {
+            defaultTimerColor = timerText.color;
+        }
+    }
 
     void Update()
     {
@@ -34,6 +43,16 @@ public class Timer : MonoBehaviour
         int seconds = Mathf.FloorToInt(time % 60);
 
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+
+    public void SetWarningState(bool isWarning)
+    {
+        if (timerText == null)
+        {
+            return;
+        }
+
+        timerText.color = isWarning ? Color.red : defaultTimerColor;
     }
 
     void TimeEnded()
