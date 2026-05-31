@@ -10048,6 +10048,7 @@ MonoBehaviour:
   initialSceneName: Inici
   gameplaySceneName: CanvisProbes
   upgradeSceneName: UpgradeShop
+  finalSceneName: FinalScene
   totalRounds: 3
   currentRound: 1
   totalMoney: 0
@@ -13424,7 +13425,7 @@ MonoBehaviour:
   pickUp: {fileID: 8300000, guid: eed796a712520b84a971f81fb8953489, type: 3}
   drop: {fileID: 8300000, guid: 2d97be342bd462f4aa98bf16bdecb55b, type: 3}
   cut: {fileID: 8300000, guid: 104bfe9dcc4ae21419968539c0be9ab9, type: 3}
-  warning: {fileID: 8300000, guid: ad7d9417286c0a541ab8e0faf11038d4, type: 3}
+  warning: {fileID: 8300000, guid: 3afea40db68a37e488dd218d6a463970, type: 3}
   grill: {fileID: 8300000, guid: b4759e2fe08ef684da58aae1823b683d, type: 3}
   deliver: {fileID: 8300000, guid: b3b1ca576c2899b40befb38abb0775fe, type: 3}
   debugAudio: 1
