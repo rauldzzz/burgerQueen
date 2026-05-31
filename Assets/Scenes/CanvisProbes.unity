@@ -8978,6 +8978,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 265488da0100df14290ca7bcdbdf13cd, type: 2}
   - {fileID: 11400000, guid: 8062888339c8c334bbb1f8e744f1be2a, type: 2}
   - {fileID: 11400000, guid: e5f0be5a90b9c944f92c6a22a3de2410, type: 2}
+  - {fileID: 11400000, guid: 2194b96c72f39bd4a9e0bcd3f5bc12b8, type: 2}
+  - {fileID: 11400000, guid: 19841b886430bf64986715f779c35149, type: 2}
+  - {fileID: 11400000, guid: fe00fa39b1ed46a4cad3eaa8a3d52730, type: 2}
   autoSpawnStartingState: 0
   ordersManager: {fileID: 1243334000}
   itemSpawnPosition: {x: 16.54, y: 23.2, z: -2.12}
@@ -16711,6 +16714,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 265488da0100df14290ca7bcdbdf13cd, type: 2}
   - {fileID: 11400000, guid: 8062888339c8c334bbb1f8e744f1be2a, type: 2}
   - {fileID: 11400000, guid: e5f0be5a90b9c944f92c6a22a3de2410, type: 2}
+  - {fileID: 11400000, guid: 2194b96c72f39bd4a9e0bcd3f5bc12b8, type: 2}
+  - {fileID: 11400000, guid: 19841b886430bf64986715f779c35149, type: 2}
+  - {fileID: 11400000, guid: fe00fa39b1ed46a4cad3eaa8a3d52730, type: 2}
   autoSpawnStartingState: 0
   ordersManager: {fileID: 1243334000}
   itemSpawnPosition: {x: 16.54, y: 23.2, z: -2.12}
