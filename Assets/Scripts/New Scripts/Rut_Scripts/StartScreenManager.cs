@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -59,6 +60,13 @@ public class StartScreenManager : MonoBehaviour
     {
         if (gameStarted)
             return;
+
+        Keyboard keyboard = Keyboard.current;
+        if (keyboard != null && keyboard.sKey.wasPressedThisFrame)
+        {
+            Debug.Log("StartScreenManager: 'S' key pressed. Skipping start sequence and starting game immediately.");
+            instructionsForwardDistance = 0f;
+        }
 
         bool bothReady =
             player1Spot != null &&
