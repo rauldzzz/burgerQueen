@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BurgerRecipe
   burgerName: VegetalBurger
   burger: {fileID: 6399767192185362882, guid: 9391173bc6bf6be49a2e6695dd712d24, type: 3}
-  reward: 40
+  reward: 50
   finalBurgerImage: {fileID: -1168792325, guid: 9660505bade04e14e915cd57e81cc7a7, type: 3}
   ingredientImages:
   - {fileID: 21300000, guid: 10232ac9b96a0d44281a317134cbc6da, type: 3}

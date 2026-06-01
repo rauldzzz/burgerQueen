@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BurgerRecipe
   burgerName: Tomatonator
   burger: {fileID: 6718238259088262813, guid: c2d04046a2a2ca34b85976dd8afc9add, type: 3}
-  reward: 50
+  reward: 60
   finalBurgerImage: {fileID: -1945080026, guid: 3be4813065e14a445a698d4e202e0154, type: 3}
   ingredientImages:
   - {fileID: 21300000, guid: 10232ac9b96a0d44281a317134cbc6da, type: 3}

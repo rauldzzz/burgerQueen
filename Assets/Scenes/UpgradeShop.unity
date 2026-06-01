@@ -6155,7 +6155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeType: 0
-  price: 100
+  price: 90
   holdDuration: 2
   priceText: {fileID: 1778135168}
   targetRenderer: {fileID: 721042684}
@@ -10098,7 +10098,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeType: 0
-  price: 100
+  price: 60
   holdDuration: 2
   priceText: {fileID: 194556801}
   targetRenderer: {fileID: 1156683463}
@@ -11498,7 +11498,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeType: 0
-  price: 100
+  price: 60
   holdDuration: 2
   priceText: {fileID: 194798564}
   targetRenderer: {fileID: 1307597517}
@@ -12058,7 +12058,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeType: 0
-  price: 100
+  price: 90
   holdDuration: 2
   priceText: {fileID: 1674588923}
   targetRenderer: {fileID: 1369474754}
@@ -15825,11 +15825,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TrackingManager
   calibrationUI: {fileID: 809609383}
   trackingInterface: {fileID: 809609381}
-  enableTracking: 0
+  enableTracking: 1
   numberOfPlayers: 2
   numberOfBaseStations: 4
-  enableRotation: 1
-  enableYAxis: 1
+  enableRotation: 0
+  enableYAxis: 0
   virtualWorldSpace: {x: 100, y: 1, z: 100}
   players:
   - {fileID: 402089194}

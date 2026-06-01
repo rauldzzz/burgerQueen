@@ -10308,11 +10308,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TrackingManager
   calibrationUI: {fileID: 809609383}
   trackingInterface: {fileID: 809609381}
-  enableTracking: 0
+  enableTracking: 1
   numberOfPlayers: 2
   numberOfBaseStations: 4
-  enableRotation: 1
-  enableYAxis: 1
+  enableRotation: 0
+  enableYAxis: 0
   virtualWorldSpace: {x: 100, y: 1, z: 100}
   players:
   - {fileID: 402089194}
